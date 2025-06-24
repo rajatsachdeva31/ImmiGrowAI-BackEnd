@@ -1,0 +1,277 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  email                  String                 @unique
+  firebaseUid            String                 @unique
+  createdAt              DateTime               @default(now())
+  id                     Int                    @id @default(autoincrement())
+  roleId                 Int
+  DOB                    DateTime
+  fullName               String
+  phoneNo                String                 @unique
+  userVerified           Boolean?               @default(false)
+  backgroundVerification Boolean?               @default(false)
+  termsConditionCheck    Boolean?               @default(false)
+  statusInCanada         String?
+  googleRefreshToken     String?
+  alreadyInCanada        Boolean?
+  countryOfOrigin        String?
+  currentLocation        String?
+  availableSlots         Availability[]
+  carBookings            CarBooking[]
+  carDealership          CarDealership?
+  carListings            CarListing[]
+  consultantSessions     ConsultationBooking[]  @relation("Consultant")
+  consultationBookings   ConsultationBooking[]  @relation("User")
+  favouriteCars          FavouriteCar[]
+  favouriteHouses        FavouriteHouse[]
+  houseBookings          HouseBooking[]
+  houseListings          HouseListing[]
+  immigrationConsultant  ImmigrationConsultant?
+  payments               Payment[]
+  realtor                Realtor?
+  role                   Role                   @relation(fields: [roleId], references: [id])
+  userDocuments          UserDocument[]
+}
+
+model Realtor {
+  id                      Int      @id @default(autoincrement())
+  userId                  Int      @unique
+  businessName            String
+  businessAddress         String?
+  realEstateLicenseNumber String
+  affiliatedAssociations  String?
+  areasCovered            String
+  specialties             String
+  portfolioWebsite        String?
+  businessRegistration    String
+  workType                WorkType
+  brokerageName           String?
+  officeLocationAvailable Boolean
+  teamMembers             Int
+  virtualPropertyTour     Boolean
+  yearsOfExperience       String
+  user                    User     @relation(fields: [userId], references: [id])
+}
+
+model CarDealership {
+  id                      Int     @id @default(autoincrement())
+  userId                  Int     @unique
+  showroomLocations       String
+  testDrivePolicy         String
+  financingOptions        String
+  tradeInAvailable        Boolean
+  serviceWarrantyInfo     String
+  businessRegistration    String
+  businessName            String
+  dealershipLicenseNumber String
+  carBrandsSold           String
+  newOrUsedCars           String
+  yearsInBusiness         String
+  user                    User    @relation(fields: [userId], references: [id])
+}
+
+model ImmigrationConsultant {
+  id                   Int     @id @default(autoincrement())
+  userId               Int     @unique
+  countriesServed      String
+  consultationFee      Float?
+  businessRegistration String
+  partneredLegalFirms  String?
+  websiteOrSocialMedia String?
+  businessName         String
+  businessAddress      String
+  licenseNumber        String
+  servicesOffered      String
+  languagesSpoken      String
+  yearsOfExperience    String
+  user                 User    @relation(fields: [userId], references: [id])
+}
+
+model Role {
+  name  String @unique
+  id    Int    @id @default(autoincrement())
+  users User[]
+}
+
+model HouseListing {
+  title         String
+  description   String?
+  price         Decimal
+  location      String
+  createdAt     DateTime           @default(now())
+  id            Int                @id @default(autoincrement())
+  landlordId    Int
+  endDate       DateTime?
+  endTime       String?
+  openhouse     Boolean            @default(false)
+  startTime     String?
+  startdate     DateTime?
+  bathrooms     Int?
+  bedrooms      Int?
+  squareFeet    Int?
+  favourites    FavouriteHouse[]
+  houseBookings HouseBooking[]
+  houseImages   HouseImage[]
+  landlord      User               @relation(fields: [landlordId], references: [id])
+  propertyDocs  PropertyDocument[]
+}
+
+model CarListing {
+  model         String
+  make          String
+  price         Decimal
+  createdAt     DateTime       @default(now())
+  id            Int            @id @default(autoincrement())
+  dealershipId  Int
+  exteriorColor String?
+  fuelType      String?
+  interiorColor String?
+  mileage       Int?
+  noOfSeats     Int?
+  status        String?
+  transmission  String?
+  vehicleType   String?
+  vin           String?
+  year          Int?
+  carBookings   CarBooking[]
+  carDocs       CarDocument[]
+  carImages     CarImage[]
+  dealership    User           @relation(fields: [dealershipId], references: [id])
+  favourites    FavouriteCar[]
+}
+
+model Availability {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  startTime DateTime
+  endTime   DateTime
+  status    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model HouseBooking {
+  startDate DateTime
+  endDate   DateTime
+  status    String
+  createdAt DateTime     @default(now())
+  id        Int          @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  meetLink  String?
+  listing   HouseListing @relation(fields: [listingId], references: [id])
+  user      User         @relation(fields: [userId], references: [id])
+}
+
+model CarBooking {
+  startDate DateTime
+  endDate   DateTime
+  status    String
+  createdAt DateTime   @default(now())
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  meetLink  String?
+  listing   CarListing @relation(fields: [listingId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model ConsultationBooking {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  startDate    DateTime
+  endDate      DateTime
+  status       String
+  meetLink     String?
+  createdAt    DateTime @default(now())
+  consultantId Int
+  consultant   User     @relation("Consultant", fields: [consultantId], references: [id])
+  user         User     @relation("User", fields: [userId], references: [id])
+}
+
+model UserDocument {
+  documentType String
+  fileData     Bytes
+  createdAt    DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model PropertyDocument {
+  documentType String
+  fileData     Bytes
+  createdAt    DateTime     @default(now())
+  id           Int          @id @default(autoincrement())
+  listingId    Int
+  listing      HouseListing @relation(fields: [listingId], references: [id])
+}
+
+model CarDocument {
+  documentType String
+  fileData     Bytes
+  createdAt    DateTime   @default(now())
+  id           Int        @id @default(autoincrement())
+  listingId    Int
+  listing      CarListing @relation(fields: [listingId], references: [id])
+}
+
+model Payment {
+  amount          Decimal
+  transactionType String
+  createdAt       DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model HouseImage {
+  imageData Bytes
+  createdAt DateTime     @default(now())
+  id        Int          @id @default(autoincrement())
+  listingId Int
+  listing   HouseListing @relation(fields: [listingId], references: [id])
+}
+
+model CarImage {
+  imageData Bytes
+  createdAt DateTime   @default(now())
+  id        Int        @id @default(autoincrement())
+  listingId Int
+  listing   CarListing @relation(fields: [listingId], references: [id])
+}
+
+model FavouriteCar {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  createdAt DateTime   @default(now())
+  listing   CarListing @relation(fields: [listingId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@unique([userId, listingId])
+}
+
+model FavouriteHouse {
+  id        Int          @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  createdAt DateTime     @default(now())
+  listing   HouseListing @relation(fields: [listingId], references: [id])
+  user      User         @relation(fields: [userId], references: [id])
+
+  @@unique([userId, listingId], name: "userId_listingId")
+}
+
+enum WorkType {
+  BROKERAGE
+  INDEPENDENT
+}
