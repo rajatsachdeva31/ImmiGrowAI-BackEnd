@@ -1,8 +1,7 @@
 const express = require('express');
 const { google } = require('googleapis');
 const verifyToken = require('../middleware/authMiddleware');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { createSupabaseAdmin } = require('../config/supabase');
 const { getAccessToken } = require('../middleware/oauthTokenMiddleware');
 const appointmentRouter = express.Router();
 

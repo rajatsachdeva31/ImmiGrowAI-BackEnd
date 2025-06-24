@@ -1,7 +1,6 @@
 const express = require('express');
 const verifyToken = require('../middleware/authMiddleware');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { createSupabaseAdmin } = require('../config/supabase');
 const multer = require('multer');
 
 // Configure Multer for in-memory storage

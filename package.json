@@ -8,10 +8,10 @@
     "dev": "nodemon ./index.js",
     "prisma:seed": "node prisma/seed.js"
   },
-  "author": "Samruddhi Chavan and Manpreet Gulati",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.5.0",
+    "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.7.9",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
@@ -19,18 +19,17 @@
     "debug": "^4.4.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
     "express-session": "^1.18.1",
-    "firebase-admin": "^13.0.2",
-    "googleapis": "^146.0.0",
-    "iconv-lite": "^0.6.3",
+    "googleapis": "^150.0.1",
+    "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mailgen": "^2.0.29",
-    "mailtrap": "^3.4.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
     "pg": "^8.13.1",
-    "readline-sync": "^1.4.10"
+    "uuid": "^10.0.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "prisma": "^6.5.0"

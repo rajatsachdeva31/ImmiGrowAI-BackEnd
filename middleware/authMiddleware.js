@@ -1,6 +1,6 @@
-const admin = require('../middleware/firebaseAdminMiddleware'); 
+const { createSupabaseClient } = require('../config/supabase');
 
-// Middleware to verify Firebase token
+// Middleware to verify Supabase JWT token
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -11,9 +11,15 @@ const verifyToken = async (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    // Verify the token using Firebase Admin SDK
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken; // Attach decoded user data to the request
+    // Verify the token using Supabase
+    const supabase = createSupabaseClient();
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+
+    if (error || !user) {
+      return res.status(403).json({ error: "Forbidden. Invalid or expired token." });
+    }
+
+    req.user = user; // Attach user data to the request
     next(); // Pass to the next middleware/route handler
   } catch (error) {
     return res.status(403).json({ error: "Forbidden. Invalid or expired token." });

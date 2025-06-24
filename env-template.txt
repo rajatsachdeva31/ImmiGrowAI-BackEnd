@@ -1,0 +1,23 @@
+# Copy this file to .env and replace with your actual values
+
+# Supabase Configuration (REQUIRED - Replace with your actual values)
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your_actual_supabase_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_actual_supabase_service_role_key_here
+
+# Server Configuration
+NODE_ENV=development
+PORT=5500
+
+# Security (use your existing AES_SECRET_KEY value)
+AES_SECRET_KEY=your_existing_aes_secret_key
+
+# Email Configuration (use your existing email values)
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+
+# INSTRUCTIONS:
+# 1. Copy this file and rename it to .env
+# 2. Replace the placeholder values with your actual credentials
+# 3. Save the file
+# 4. Restart your backend server 

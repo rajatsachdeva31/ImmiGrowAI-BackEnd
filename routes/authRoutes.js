@@ -1,32 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
 require("dotenv").config(); // Load environment variables
-const admin = require("../middleware/firebaseAdminMiddleware");
-const decryptPasswordMiddleware = require("../middleware/decryptionMiddleware");
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { createSupabaseClient, createSupabaseAdmin } = require("../config/supabase");
 
-// Firebase REST API base URL and API key
-const FIREBASE_AUTH_URL = process.env.FIREBASE_AUTH_URL;
-const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
-
-
-// Helper function for Firebase API interaction
-const firebaseRequest = async (url, data) => {
-  try {
-    const response = await axios.post(`${FIREBASE_AUTH_URL}:${url}?key=${FIREBASE_API_KEY}`, data);
-    return response.data;
-  } catch (error) {
-    throw error.response?.data?.error || { message: "An unknown error occurred." };
-  }
-};
 
 // **Routes**
 
-
 // Register User with Email Verification
-router.post("/signup", decryptPasswordMiddleware, async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -34,33 +15,25 @@ router.post("/signup", decryptPasswordMiddleware, async (req, res) => {
   }
 
   try {
-    // Sign up the user
-    const result = await firebaseRequest("signUp", {
+    const supabase = createSupabaseClient();
+    
+    // Sign up the user with Supabase
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      returnSecureToken: true,
-    });
-    //console.log(result)
-
-    // Send email verification
-    const idToken = result.idToken;
-   
-
-    await firebaseRequest("sendOobCode", {
-      requestType: "VERIFY_EMAIL",
-      idToken,
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/callback`
+      }
     });
 
-    res.cookie("refreshtoken", result.refreshToken, {
-      httpOnly: true,  // Prevent access via JavaScript
-      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-      sameSite: "Strict", // CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days expiration or 1 day
-    });
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
 
     res.status(200).json({
       message: "User registered successfully. A verification email has been sent to your email address.",
-      userId: result.localId,
+      userId: data.user?.id,
+      emailSent: !data.user?.email_confirmed_at
     });
   } catch (error) {
     res.status(400).json({
@@ -69,22 +42,28 @@ router.post("/signup", decryptPasswordMiddleware, async (req, res) => {
   }
 });
 
-
 // Resend Email Verification
 router.post("/resend-verification", async (req, res) => {
-  const idToken = req.headers.authorization?.split("Bearer ")[1]; // Extract token
+  const { email } = req.body;
 
-
-  if (!idToken) {
-    return res.status(400).json({ error: "ID Token is required" });
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
   }
 
   try {
-    // Send a verification email
-    await firebaseRequest("sendOobCode", {
-      requestType: "VERIFY_EMAIL",
-      idToken,
+    const supabase = createSupabaseClient();
+    
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/callback`
+      }
     });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
 
     res.status(200).json({ message: "Verification email resent successfully." });
   } catch (error) {
@@ -93,9 +72,8 @@ router.post("/resend-verification", async (req, res) => {
   }
 });
 
-
 // Login User with Email Verification Check
-router.post("/login", decryptPasswordMiddleware, async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password, rememberMe } = req.body;
 
   if (!email || !password) {
@@ -103,78 +81,72 @@ router.post("/login", decryptPasswordMiddleware, async (req, res) => {
   }
 
   try {
-    // Authenticate user
-    const result = await firebaseRequest("signInWithPassword", {
+    const supabase = createSupabaseClient();
+    
+    // Authenticate user with Supabase
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-      returnSecureToken: true,
     });
- 
-    const decodedToken = await admin.auth().verifyIdToken(result.idToken);
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
 
     // Check if the user's email is verified
-    if (!decodedToken.email_verified) {
+    if (!data.user.email_confirmed_at) {
       return res.status(403).json({
         error: "Email not verified. Please verify your email before logging in.",
-        emailVerified: decodedToken.email_verified,
-        token: result.idToken
+        emailVerified: false,
+        token: data.session?.access_token
       });
-
-      // if email verified check for user verified if user too - send role in reponse body for dashboard redirect else send useVerired  - false
     }
-    else{
 
-      const user = await prisma.user.findUnique({
-        where: { email: decodedToken.email,
-          
-         },
-         include: {
-           role: true, 
-         }
-      });
+    // Check if user exists in our database
+    const supabaseAdmin = createSupabaseAdmin();
+    const { data: user, error: userError } = await supabaseAdmin
+      .from('users')
+      .select(`
+        *,
+        role:roles(*)
+      `)
+      .eq('email', data.user.email)
+      .single();
 
-      res.cookie("token", result.idToken, {
-        httpOnly: true,  // Prevent access via JavaScript
-        secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-        sameSite: "Strict", // CSRF protection
-        maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 7 days expiration or 1 day
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 7 days or 1 day
+    };
+
+    res.cookie("token", data.session.access_token, cookieOptions);
+    res.cookie("refreshtoken", data.session.refresh_token, cookieOptions);
+
+    if (!user) {
+      res.status(200).json({
+        message: "Login successful",
+        email: data.user.email,
+        emailVerified: true,
+        onboarded: false
       });
-      res.cookie("refreshtoken", result.refreshToken, {
-        httpOnly: true,  // Prevent access via JavaScript
-        secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-        sameSite: "Strict", // CSRF protection
-        maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 7 days expiration or 1 day
-      });
-    
-      if (user === null) {
+    } else {
+      if (user.user_verified) {
         res.status(200).json({
           message: "Login successful",
-          email: result.email,
-          emailVerified: decodedToken.email_verified,
-          onboarded: false
+          email: data.user.email,
+          emailVerified: true,
+          userVerified: user.user_verified,
+          userRole: user.role?.name,
+        });
+      } else {
+        res.status(200).json({
+          message: "Login successful",
+          email: data.user.email,
+          emailVerified: true,
+          userVerified: user.user_verified,
         });
       }
-      else{
-        if(decodedToken.email_verified && user.userVerified){
-          res.status(200).json({
-            message: "Login successful",
-            email: result.email,
-            emailVerified: decodedToken.email_verified,
-            userVerified: user.userVerified,
-            userRole:user.role.name,
-          });
-        }
-        else{
-          res.status(200).json({
-            message: "Login successful",
-            email: result.email,
-            emailVerified: decodedToken.email_verified,
-            userVerified: user.userVerified,
-          });
-        }
-      }
-
-     
     }
     
   } catch (error) {
@@ -183,6 +155,7 @@ router.post("/login", decryptPasswordMiddleware, async (req, res) => {
   }
 });
 
+// Refresh Token
 router.post("/refresh-token", async (req, res) => {
   const refreshToken = req.cookies.refreshtoken;
 
@@ -190,118 +163,39 @@ router.post("/refresh-token", async (req, res) => {
     return res.status(401).json({ error: "No refresh token found. Please log in again." });
   }
 
-  console.log("Received refresh token:", refreshToken);  // Log the token for debugging
-
   try {
-    const response = await fetch(`https://securetoken.googleapis.com/v1/token?key=${FIREBASE_API_KEY}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-      }),
-    });
-
-    const data = await response.json();
-
-    console.log(data)
-
-    if (!response.ok) {
-      // Firebase returned an error, pass it to the client
-      return res.status(400).json({ error: "Failed to refresh token", details: data });
-    }
-
-    // If the refresh was successful, send the new token as a cookie
-    res.cookie("token", data.id_token, {
-      httpOnly: true, // Prevent access via JavaScript
-      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-      sameSite: "Strict", // CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
-    });
-
-    res.status(200).json({ message: "Refresh token successful" });
-  } catch (error) {
-    console.error("Error during token refresh:", error);
-    res.status(400).json({ error: "Failed to refresh token", details: error.message });
-  }
-});
-
-
-//logout
-router.post("/logout", (req, res) => {
-  res.clearCookie("refreshtoken"); // Clear refresh token cookie
-  res.status(200).json({ message: "Logout successful" });
-});
-
-// Google Sign-In
-router.post("/google-signin", async (req, res) => {
-  const { idToken, refreshToken, rememberMe } = req.body;
-
-  if (!idToken) {
-    return res.status(400).json({ error: "Missing ID Token" });
-  }
-
-  try {
-    // Verify ID token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const { uid, email, name } = decodedToken;
-
-    const user = await prisma.user.findUnique({
-      where: { email: decodedToken.email,
-       },
-       include: {
-         role: true, 
-       }
-    });
-
-    res.cookie("token", idToken, {
-      httpOnly: true,  // Prevent access via JavaScript
-      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-      sameSite: "Strict", // CSRF protection
-      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 7 days expiration or 1 day
-    });
-    res.cookie("refreshtoken", refreshToken, {
-      httpOnly: true,  // Prevent access via JavaScript
-      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-      sameSite: "Strict", // CSRF protection
-      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 7 days expiration or 1 day
-    });
+    const supabase = createSupabaseClient();
     
-    if (user === null) {
-      res.status(200).json({
-        message: "Login successful",
-        email: email,
-        emailVerified: decodedToken.email_verified,
-        onboarded: false
-      });
-    }
-    else{
-      if(user.userVerified){
-        res.status(200).json({
-          message: "Login successful",
-          email: email,
-          userVerified: user.userVerified,
-          userRole:user.role.name,
-        });
-      }
-      else{
-        res.status(200).json({
-          message: "Login successful",
-          email: email,
-          userVerified: user.userVerified,
-        });
-      }
+    const { data, error } = await supabase.auth.refreshSession({
+      refresh_token: refreshToken
+    });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
     }
 
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    };
+
+    res.cookie("token", data.session.access_token, cookieOptions);
+    res.cookie("refreshtoken", data.session.refresh_token, cookieOptions);
+
+    res.status(200).json({
+      message: "Token refreshed successfully",
+      token: data.session.access_token,
+    });
+
   } catch (error) {
-    console.error("Error verifying ID token:", error);
-    res.status(400).json({ error: "Invalid ID Token" });
+    console.error("Token refresh failed:", error);
+    res.status(400).json({ error: error.message });
   }
 });
 
-// Forgot Password
+// Password Reset Request
 router.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
 
@@ -310,17 +204,82 @@ router.post("/forgot-password", async (req, res) => {
   }
 
   try {
-    // Request Firebase to generate password reset link
-    await firebaseRequest("sendOobCode", {
-      requestType: "PASSWORD_RESET",
-      email,
+    const supabase = createSupabaseClient();
+    
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/reset-password`
     });
 
-    res.status(200).json({ message: "Password reset link sent successfully. Check your email." });
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json({
+      message: "Password reset email sent successfully.",
+    });
+
   } catch (error) {
-    console.error("Error sending password reset link:", error);
+    console.error("Password reset request failed:", error);
     res.status(400).json({ error: error.message });
   }
 });
+
+// Update Password (after reset)
+router.post("/reset-password", async (req, res) => {
+  const { access_token, refresh_token, new_password } = req.body;
+
+  if (!access_token || !new_password) {
+    return res.status(400).json({ error: "Access token and new password are required" });
+  }
+
+  try {
+    const supabase = createSupabaseClient();
+    
+    // Set the session
+    await supabase.auth.setSession({
+      access_token,
+      refresh_token
+    });
+
+    const { error } = await supabase.auth.updateUser({
+      password: new_password
+    });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json({
+      message: "Password updated successfully.",
+    });
+
+  } catch (error) {
+    console.error("Password reset failed:", error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Logout
+router.post("/logout", async (req, res) => {
+  try {
+    const supabase = createSupabaseClient();
+    
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.clearCookie("token");
+    res.clearCookie("refreshtoken");
+
+    res.status(200).json({ message: "Logout successful" });
+
+  } catch (error) {
+    console.error("Logout failed:", error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;
 

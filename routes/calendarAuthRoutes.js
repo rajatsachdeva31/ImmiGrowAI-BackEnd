@@ -1,7 +1,6 @@
 const express = require('express');
 const { google } = require('googleapis');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { createSupabaseAdmin } = require('../config/supabase');
 require('dotenv').config();
 
 const router = express.Router();
@@ -52,12 +51,17 @@ router.get('/auth/google/callback', async (req, res) => {
             return res.status(400).json({ error: 'Failed to retrieve user email' });
         }
 
-        // Store refresh token in DB (only include fields that exist in Prisma)
+        // Store refresh token in DB
         if (tokens.refresh_token) {
-            await prisma.user.update({
-                where: { email: data.email },
-                data: { googleRefreshToken: tokens.refresh_token }
-            });
+            const supabase = createSupabaseAdmin();
+            const { error } = await supabase
+                .from('users')
+                .update({ google_refresh_token: tokens.refresh_token })
+                .eq('email', data.email);
+                
+            if (error) {
+                console.error('Error storing refresh token:', error);
+            }
         }
 
         res.json({ success: true, message: "Google Calendar connected successfully!", email: data.email });

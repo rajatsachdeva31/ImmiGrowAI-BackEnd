@@ -1,7 +1,6 @@
 const express = require('express');
 const verifyToken = require('../middleware/authMiddleware');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { createSupabaseAdmin } = require('../config/supabase');
 const multer = require('multer');
 
 // Configure Multer for in-memory storage
@@ -391,7 +390,7 @@ houseListingRouter.delete('/delete-house-image/:id', verifyToken, async (req, re
 
 houseListingRouter.post('/add-to-favourites', verifyToken, async (req, res) => {
   const { listingId } = req.body;
-  // const firebaseUid = req.user.user_id;
+  
 
   if (!listingId) {
     return res.status(400).json({ error: 'listingId is required' });
@@ -430,8 +429,7 @@ houseListingRouter.post('/add-to-favourites', verifyToken, async (req, res) => {
 //remove from FavouriteHouse
 houseListingRouter.delete('/remove-from-favourites/:listingId', verifyToken, async (req, res) => {
   const listingId = parseInt(req.params.listingId, 10);
-  // const firebaseUid = req.user.user_id;
-  console.log('Decoded Firebase UID:', req.user.user_id);
+      console.log('Decoded User ID:', req.user.id);
   try {
     const user = await prisma.user.findUnique({
       where: { email:req.user.email }

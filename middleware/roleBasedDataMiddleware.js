@@ -1,17 +1,17 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const { createSupabaseAdmin } = require("../config/supabase");
 
 const roleBasedData = async (req, res, next) => {
   try {
+    const supabase = createSupabaseAdmin();
 
     // find role based on rolename
-    const role = await prisma.role.findUnique({
-      where: {
-        name: req.body.rolename,
-      },
-    });
+    const { data: role, error } = await supabase
+      .from('roles')
+      .select('*')
+      .eq('name', req.body.rolename)
+      .single();
 
-    if (!role) {
+    if (error || !role) {
       return res.status(404).json({ error: "Role not found" });
     }
 
