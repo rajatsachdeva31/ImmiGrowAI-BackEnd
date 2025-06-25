@@ -331,7 +331,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.5.0
+   * Prisma Client JS version: 6.10.1
    * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
    */
   export type PrismaVersion = {
@@ -2432,7 +2432,7 @@ export namespace Prisma {
 
   /**
    * Fields of the User model
-   */ 
+   */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'Int'>
     readonly email: FieldRef<"User", 'String'>
@@ -3729,7 +3729,7 @@ export namespace Prisma {
 
   /**
    * Fields of the UserCareerProfile model
-   */ 
+   */
   interface UserCareerProfileFieldRefs {
     readonly id: FieldRef<"UserCareerProfile", 'Int'>
     readonly userId: FieldRef<"UserCareerProfile", 'Int'>
@@ -4167,26 +4167,32 @@ export namespace Prisma {
   export type ResumeAnalysisAvgAggregateOutputType = {
     id: number | null
     userId: number | null
-    fileSize: number | null
   }
 
   export type ResumeAnalysisSumAggregateOutputType = {
     id: number | null
     userId: number | null
-    fileSize: number | null
   }
 
   export type ResumeAnalysisMinAggregateOutputType = {
     id: number | null
     userId: number | null
+    originalFileName: string | null
+    fileData: Uint8Array | null
+    extractedText: string | null
+    structuredData: string | null
     personalInfo: string | null
+    professionalSummary: string | null
     skills: string | null
     workExperience: string | null
     education: string | null
+    certifications: string | null
+    projects: string | null
+    canadianMarketAnalysis: string | null
     confidenceScores: string | null
-    rawText: string | null
-    originalFileName: string | null
-    fileSize: number | null
+    metadata: string | null
+    processingMethod: string | null
+    userCorrections: string | null
     processingStatus: string | null
     createdAt: Date | null
   }
@@ -4194,14 +4200,22 @@ export namespace Prisma {
   export type ResumeAnalysisMaxAggregateOutputType = {
     id: number | null
     userId: number | null
+    originalFileName: string | null
+    fileData: Uint8Array | null
+    extractedText: string | null
+    structuredData: string | null
     personalInfo: string | null
+    professionalSummary: string | null
     skills: string | null
     workExperience: string | null
     education: string | null
+    certifications: string | null
+    projects: string | null
+    canadianMarketAnalysis: string | null
     confidenceScores: string | null
-    rawText: string | null
-    originalFileName: string | null
-    fileSize: number | null
+    metadata: string | null
+    processingMethod: string | null
+    userCorrections: string | null
     processingStatus: string | null
     createdAt: Date | null
   }
@@ -4209,14 +4223,22 @@ export namespace Prisma {
   export type ResumeAnalysisCountAggregateOutputType = {
     id: number
     userId: number
+    originalFileName: number
+    fileData: number
+    extractedText: number
+    structuredData: number
     personalInfo: number
+    professionalSummary: number
     skills: number
     workExperience: number
     education: number
+    certifications: number
+    projects: number
+    canadianMarketAnalysis: number
     confidenceScores: number
-    rawText: number
-    originalFileName: number
-    fileSize: number
+    metadata: number
+    processingMethod: number
+    userCorrections: number
     processingStatus: number
     createdAt: number
     _all: number
@@ -4226,26 +4248,32 @@ export namespace Prisma {
   export type ResumeAnalysisAvgAggregateInputType = {
     id?: true
     userId?: true
-    fileSize?: true
   }
 
   export type ResumeAnalysisSumAggregateInputType = {
     id?: true
     userId?: true
-    fileSize?: true
   }
 
   export type ResumeAnalysisMinAggregateInputType = {
     id?: true
     userId?: true
+    originalFileName?: true
+    fileData?: true
+    extractedText?: true
+    structuredData?: true
     personalInfo?: true
+    professionalSummary?: true
     skills?: true
     workExperience?: true
     education?: true
+    certifications?: true
+    projects?: true
+    canadianMarketAnalysis?: true
     confidenceScores?: true
-    rawText?: true
-    originalFileName?: true
-    fileSize?: true
+    metadata?: true
+    processingMethod?: true
+    userCorrections?: true
     processingStatus?: true
     createdAt?: true
   }
@@ -4253,14 +4281,22 @@ export namespace Prisma {
   export type ResumeAnalysisMaxAggregateInputType = {
     id?: true
     userId?: true
+    originalFileName?: true
+    fileData?: true
+    extractedText?: true
+    structuredData?: true
     personalInfo?: true
+    professionalSummary?: true
     skills?: true
     workExperience?: true
     education?: true
+    certifications?: true
+    projects?: true
+    canadianMarketAnalysis?: true
     confidenceScores?: true
-    rawText?: true
-    originalFileName?: true
-    fileSize?: true
+    metadata?: true
+    processingMethod?: true
+    userCorrections?: true
     processingStatus?: true
     createdAt?: true
   }
@@ -4268,14 +4304,22 @@ export namespace Prisma {
   export type ResumeAnalysisCountAggregateInputType = {
     id?: true
     userId?: true
+    originalFileName?: true
+    fileData?: true
+    extractedText?: true
+    structuredData?: true
     personalInfo?: true
+    professionalSummary?: true
     skills?: true
     workExperience?: true
     education?: true
+    certifications?: true
+    projects?: true
+    canadianMarketAnalysis?: true
     confidenceScores?: true
-    rawText?: true
-    originalFileName?: true
-    fileSize?: true
+    metadata?: true
+    processingMethod?: true
+    userCorrections?: true
     processingStatus?: true
     createdAt?: true
     _all?: true
@@ -4370,14 +4414,22 @@ export namespace Prisma {
   export type ResumeAnalysisGroupByOutputType = {
     id: number
     userId: number
+    originalFileName: string | null
+    fileData: Uint8Array | null
+    extractedText: string | null
+    structuredData: string | null
     personalInfo: string | null
+    professionalSummary: string | null
     skills: string | null
     workExperience: string | null
     education: string | null
+    certifications: string | null
+    projects: string | null
+    canadianMarketAnalysis: string | null
     confidenceScores: string | null
-    rawText: string | null
-    originalFileName: string | null
-    fileSize: number | null
+    metadata: string | null
+    processingMethod: string | null
+    userCorrections: string | null
     processingStatus: string
     createdAt: Date
     _count: ResumeAnalysisCountAggregateOutputType | null
@@ -4404,14 +4456,22 @@ export namespace Prisma {
   export type ResumeAnalysisSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    originalFileName?: boolean
+    fileData?: boolean
+    extractedText?: boolean
+    structuredData?: boolean
     personalInfo?: boolean
+    professionalSummary?: boolean
     skills?: boolean
     workExperience?: boolean
     education?: boolean
+    certifications?: boolean
+    projects?: boolean
+    canadianMarketAnalysis?: boolean
     confidenceScores?: boolean
-    rawText?: boolean
-    originalFileName?: boolean
-    fileSize?: boolean
+    metadata?: boolean
+    processingMethod?: boolean
+    userCorrections?: boolean
     processingStatus?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4420,14 +4480,22 @@ export namespace Prisma {
   export type ResumeAnalysisSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    originalFileName?: boolean
+    fileData?: boolean
+    extractedText?: boolean
+    structuredData?: boolean
     personalInfo?: boolean
+    professionalSummary?: boolean
     skills?: boolean
     workExperience?: boolean
     education?: boolean
+    certifications?: boolean
+    projects?: boolean
+    canadianMarketAnalysis?: boolean
     confidenceScores?: boolean
-    rawText?: boolean
-    originalFileName?: boolean
-    fileSize?: boolean
+    metadata?: boolean
+    processingMethod?: boolean
+    userCorrections?: boolean
     processingStatus?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4436,14 +4504,22 @@ export namespace Prisma {
   export type ResumeAnalysisSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    originalFileName?: boolean
+    fileData?: boolean
+    extractedText?: boolean
+    structuredData?: boolean
     personalInfo?: boolean
+    professionalSummary?: boolean
     skills?: boolean
     workExperience?: boolean
     education?: boolean
+    certifications?: boolean
+    projects?: boolean
+    canadianMarketAnalysis?: boolean
     confidenceScores?: boolean
-    rawText?: boolean
-    originalFileName?: boolean
-    fileSize?: boolean
+    metadata?: boolean
+    processingMethod?: boolean
+    userCorrections?: boolean
     processingStatus?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4452,19 +4528,27 @@ export namespace Prisma {
   export type ResumeAnalysisSelectScalar = {
     id?: boolean
     userId?: boolean
+    originalFileName?: boolean
+    fileData?: boolean
+    extractedText?: boolean
+    structuredData?: boolean
     personalInfo?: boolean
+    professionalSummary?: boolean
     skills?: boolean
     workExperience?: boolean
     education?: boolean
+    certifications?: boolean
+    projects?: boolean
+    canadianMarketAnalysis?: boolean
     confidenceScores?: boolean
-    rawText?: boolean
-    originalFileName?: boolean
-    fileSize?: boolean
+    metadata?: boolean
+    processingMethod?: boolean
+    userCorrections?: boolean
     processingStatus?: boolean
     createdAt?: boolean
   }
 
-  export type ResumeAnalysisOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "personalInfo" | "skills" | "workExperience" | "education" | "confidenceScores" | "rawText" | "originalFileName" | "fileSize" | "processingStatus" | "createdAt", ExtArgs["result"]["resumeAnalysis"]>
+  export type ResumeAnalysisOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "originalFileName" | "fileData" | "extractedText" | "structuredData" | "personalInfo" | "professionalSummary" | "skills" | "workExperience" | "education" | "certifications" | "projects" | "canadianMarketAnalysis" | "confidenceScores" | "metadata" | "processingMethod" | "userCorrections" | "processingStatus" | "createdAt", ExtArgs["result"]["resumeAnalysis"]>
   export type ResumeAnalysisInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -4483,14 +4567,22 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       userId: number
+      originalFileName: string | null
+      fileData: Uint8Array | null
+      extractedText: string | null
+      structuredData: string | null
       personalInfo: string | null
+      professionalSummary: string | null
       skills: string | null
       workExperience: string | null
       education: string | null
+      certifications: string | null
+      projects: string | null
+      canadianMarketAnalysis: string | null
       confidenceScores: string | null
-      rawText: string | null
-      originalFileName: string | null
-      fileSize: number | null
+      metadata: string | null
+      processingMethod: string | null
+      userCorrections: string | null
       processingStatus: string
       createdAt: Date
     }, ExtArgs["result"]["resumeAnalysis"]>
@@ -4915,18 +5007,26 @@ export namespace Prisma {
 
   /**
    * Fields of the ResumeAnalysis model
-   */ 
+   */
   interface ResumeAnalysisFieldRefs {
     readonly id: FieldRef<"ResumeAnalysis", 'Int'>
     readonly userId: FieldRef<"ResumeAnalysis", 'Int'>
+    readonly originalFileName: FieldRef<"ResumeAnalysis", 'String'>
+    readonly fileData: FieldRef<"ResumeAnalysis", 'Bytes'>
+    readonly extractedText: FieldRef<"ResumeAnalysis", 'String'>
+    readonly structuredData: FieldRef<"ResumeAnalysis", 'String'>
     readonly personalInfo: FieldRef<"ResumeAnalysis", 'String'>
+    readonly professionalSummary: FieldRef<"ResumeAnalysis", 'String'>
     readonly skills: FieldRef<"ResumeAnalysis", 'String'>
     readonly workExperience: FieldRef<"ResumeAnalysis", 'String'>
     readonly education: FieldRef<"ResumeAnalysis", 'String'>
+    readonly certifications: FieldRef<"ResumeAnalysis", 'String'>
+    readonly projects: FieldRef<"ResumeAnalysis", 'String'>
+    readonly canadianMarketAnalysis: FieldRef<"ResumeAnalysis", 'String'>
     readonly confidenceScores: FieldRef<"ResumeAnalysis", 'String'>
-    readonly rawText: FieldRef<"ResumeAnalysis", 'String'>
-    readonly originalFileName: FieldRef<"ResumeAnalysis", 'String'>
-    readonly fileSize: FieldRef<"ResumeAnalysis", 'Int'>
+    readonly metadata: FieldRef<"ResumeAnalysis", 'String'>
+    readonly processingMethod: FieldRef<"ResumeAnalysis", 'String'>
+    readonly userCorrections: FieldRef<"ResumeAnalysis", 'String'>
     readonly processingStatus: FieldRef<"ResumeAnalysis", 'String'>
     readonly createdAt: FieldRef<"ResumeAnalysis", 'DateTime'>
   }
@@ -6098,7 +6198,7 @@ export namespace Prisma {
 
   /**
    * Fields of the MentorProfile model
-   */ 
+   */
   interface MentorProfileFieldRefs {
     readonly id: FieldRef<"MentorProfile", 'Int'>
     readonly userId: FieldRef<"MentorProfile", 'Int'>
@@ -7262,7 +7362,7 @@ export namespace Prisma {
 
   /**
    * Fields of the MentorshipMatch model
-   */ 
+   */
   interface MentorshipMatchFieldRefs {
     readonly id: FieldRef<"MentorshipMatch", 'Int'>
     readonly menteeId: FieldRef<"MentorshipMatch", 'Int'>
@@ -8418,7 +8518,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CoachingSession model
-   */ 
+   */
   interface CoachingSessionFieldRefs {
     readonly id: FieldRef<"CoachingSession", 'Int'>
     readonly userId: FieldRef<"CoachingSession", 'Int'>
@@ -9593,7 +9693,7 @@ export namespace Prisma {
 
   /**
    * Fields of the JobOpportunity model
-   */ 
+   */
   interface JobOpportunityFieldRefs {
     readonly id: FieldRef<"JobOpportunity", 'Int'>
     readonly title: FieldRef<"JobOpportunity", 'String'>
@@ -10774,7 +10874,7 @@ export namespace Prisma {
 
   /**
    * Fields of the JobMatch model
-   */ 
+   */
   interface JobMatchFieldRefs {
     readonly id: FieldRef<"JobMatch", 'Int'>
     readonly userId: FieldRef<"JobMatch", 'Int'>
@@ -11944,7 +12044,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SkillGapAnalysis model
-   */ 
+   */
   interface SkillGapAnalysisFieldRefs {
     readonly id: FieldRef<"SkillGapAnalysis", 'Int'>
     readonly userId: FieldRef<"SkillGapAnalysis", 'Int'>
@@ -12410,14 +12510,22 @@ export namespace Prisma {
   export const ResumeAnalysisScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    originalFileName: 'originalFileName',
+    fileData: 'fileData',
+    extractedText: 'extractedText',
+    structuredData: 'structuredData',
     personalInfo: 'personalInfo',
+    professionalSummary: 'professionalSummary',
     skills: 'skills',
     workExperience: 'workExperience',
     education: 'education',
+    certifications: 'certifications',
+    projects: 'projects',
+    canadianMarketAnalysis: 'canadianMarketAnalysis',
     confidenceScores: 'confidenceScores',
-    rawText: 'rawText',
-    originalFileName: 'originalFileName',
-    fileSize: 'fileSize',
+    metadata: 'metadata',
+    processingMethod: 'processingMethod',
+    userCorrections: 'userCorrections',
     processingStatus: 'processingStatus',
     createdAt: 'createdAt'
   };
@@ -12538,7 +12646,7 @@ export namespace Prisma {
 
 
   /**
-   * Field references 
+   * Field references
    */
 
 
@@ -12567,6 +12675,13 @@ export namespace Prisma {
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
     
   /**
    * Deep Input Types
@@ -12736,14 +12851,22 @@ export namespace Prisma {
     NOT?: ResumeAnalysisWhereInput | ResumeAnalysisWhereInput[]
     id?: IntFilter<"ResumeAnalysis"> | number
     userId?: IntFilter<"ResumeAnalysis"> | number
+    originalFileName?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    fileData?: BytesNullableFilter<"ResumeAnalysis"> | Uint8Array | null
+    extractedText?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    structuredData?: StringNullableFilter<"ResumeAnalysis"> | string | null
     personalInfo?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    professionalSummary?: StringNullableFilter<"ResumeAnalysis"> | string | null
     skills?: StringNullableFilter<"ResumeAnalysis"> | string | null
     workExperience?: StringNullableFilter<"ResumeAnalysis"> | string | null
     education?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    certifications?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    projects?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    canadianMarketAnalysis?: StringNullableFilter<"ResumeAnalysis"> | string | null
     confidenceScores?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    rawText?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    originalFileName?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    fileSize?: IntNullableFilter<"ResumeAnalysis"> | number | null
+    metadata?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    processingMethod?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    userCorrections?: StringNullableFilter<"ResumeAnalysis"> | string | null
     processingStatus?: StringFilter<"ResumeAnalysis"> | string
     createdAt?: DateTimeFilter<"ResumeAnalysis"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -12752,14 +12875,22 @@ export namespace Prisma {
   export type ResumeAnalysisOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    originalFileName?: SortOrderInput | SortOrder
+    fileData?: SortOrderInput | SortOrder
+    extractedText?: SortOrderInput | SortOrder
+    structuredData?: SortOrderInput | SortOrder
     personalInfo?: SortOrderInput | SortOrder
+    professionalSummary?: SortOrderInput | SortOrder
     skills?: SortOrderInput | SortOrder
     workExperience?: SortOrderInput | SortOrder
     education?: SortOrderInput | SortOrder
+    certifications?: SortOrderInput | SortOrder
+    projects?: SortOrderInput | SortOrder
+    canadianMarketAnalysis?: SortOrderInput | SortOrder
     confidenceScores?: SortOrderInput | SortOrder
-    rawText?: SortOrderInput | SortOrder
-    originalFileName?: SortOrderInput | SortOrder
-    fileSize?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    processingMethod?: SortOrderInput | SortOrder
+    userCorrections?: SortOrderInput | SortOrder
     processingStatus?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -12771,14 +12902,22 @@ export namespace Prisma {
     OR?: ResumeAnalysisWhereInput[]
     NOT?: ResumeAnalysisWhereInput | ResumeAnalysisWhereInput[]
     userId?: IntFilter<"ResumeAnalysis"> | number
+    originalFileName?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    fileData?: BytesNullableFilter<"ResumeAnalysis"> | Uint8Array | null
+    extractedText?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    structuredData?: StringNullableFilter<"ResumeAnalysis"> | string | null
     personalInfo?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    professionalSummary?: StringNullableFilter<"ResumeAnalysis"> | string | null
     skills?: StringNullableFilter<"ResumeAnalysis"> | string | null
     workExperience?: StringNullableFilter<"ResumeAnalysis"> | string | null
     education?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    certifications?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    projects?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    canadianMarketAnalysis?: StringNullableFilter<"ResumeAnalysis"> | string | null
     confidenceScores?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    rawText?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    originalFileName?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    fileSize?: IntNullableFilter<"ResumeAnalysis"> | number | null
+    metadata?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    processingMethod?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    userCorrections?: StringNullableFilter<"ResumeAnalysis"> | string | null
     processingStatus?: StringFilter<"ResumeAnalysis"> | string
     createdAt?: DateTimeFilter<"ResumeAnalysis"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -12787,14 +12926,22 @@ export namespace Prisma {
   export type ResumeAnalysisOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    originalFileName?: SortOrderInput | SortOrder
+    fileData?: SortOrderInput | SortOrder
+    extractedText?: SortOrderInput | SortOrder
+    structuredData?: SortOrderInput | SortOrder
     personalInfo?: SortOrderInput | SortOrder
+    professionalSummary?: SortOrderInput | SortOrder
     skills?: SortOrderInput | SortOrder
     workExperience?: SortOrderInput | SortOrder
     education?: SortOrderInput | SortOrder
+    certifications?: SortOrderInput | SortOrder
+    projects?: SortOrderInput | SortOrder
+    canadianMarketAnalysis?: SortOrderInput | SortOrder
     confidenceScores?: SortOrderInput | SortOrder
-    rawText?: SortOrderInput | SortOrder
-    originalFileName?: SortOrderInput | SortOrder
-    fileSize?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    processingMethod?: SortOrderInput | SortOrder
+    userCorrections?: SortOrderInput | SortOrder
     processingStatus?: SortOrder
     createdAt?: SortOrder
     _count?: ResumeAnalysisCountOrderByAggregateInput
@@ -12810,14 +12957,22 @@ export namespace Prisma {
     NOT?: ResumeAnalysisScalarWhereWithAggregatesInput | ResumeAnalysisScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"ResumeAnalysis"> | number
     userId?: IntWithAggregatesFilter<"ResumeAnalysis"> | number
+    originalFileName?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    fileData?: BytesNullableWithAggregatesFilter<"ResumeAnalysis"> | Uint8Array | null
+    extractedText?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    structuredData?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
     personalInfo?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    professionalSummary?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
     skills?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
     workExperience?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
     education?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    certifications?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    projects?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    canadianMarketAnalysis?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
     confidenceScores?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
-    rawText?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
-    originalFileName?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
-    fileSize?: IntNullableWithAggregatesFilter<"ResumeAnalysis"> | number | null
+    metadata?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    processingMethod?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
+    userCorrections?: StringNullableWithAggregatesFilter<"ResumeAnalysis"> | string | null
     processingStatus?: StringWithAggregatesFilter<"ResumeAnalysis"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ResumeAnalysis"> | Date | string
   }
@@ -13492,14 +13647,22 @@ export namespace Prisma {
   }
 
   export type ResumeAnalysisCreateInput = {
+    originalFileName?: string | null
+    fileData?: Uint8Array | null
+    extractedText?: string | null
+    structuredData?: string | null
     personalInfo?: string | null
+    professionalSummary?: string | null
     skills?: string | null
     workExperience?: string | null
     education?: string | null
+    certifications?: string | null
+    projects?: string | null
+    canadianMarketAnalysis?: string | null
     confidenceScores?: string | null
-    rawText?: string | null
-    originalFileName?: string | null
-    fileSize?: number | null
+    metadata?: string | null
+    processingMethod?: string | null
+    userCorrections?: string | null
     processingStatus?: string
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutResumeAnalysesInput
@@ -13508,27 +13671,43 @@ export namespace Prisma {
   export type ResumeAnalysisUncheckedCreateInput = {
     id?: number
     userId: number
+    originalFileName?: string | null
+    fileData?: Uint8Array | null
+    extractedText?: string | null
+    structuredData?: string | null
     personalInfo?: string | null
+    professionalSummary?: string | null
     skills?: string | null
     workExperience?: string | null
     education?: string | null
+    certifications?: string | null
+    projects?: string | null
+    canadianMarketAnalysis?: string | null
     confidenceScores?: string | null
-    rawText?: string | null
-    originalFileName?: string | null
-    fileSize?: number | null
+    metadata?: string | null
+    processingMethod?: string | null
+    userCorrections?: string | null
     processingStatus?: string
     createdAt?: Date | string
   }
 
   export type ResumeAnalysisUpdateInput = {
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutResumeAnalysesNestedInput
@@ -13537,14 +13716,22 @@ export namespace Prisma {
   export type ResumeAnalysisUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13552,27 +13739,43 @@ export namespace Prisma {
   export type ResumeAnalysisCreateManyInput = {
     id?: number
     userId: number
+    originalFileName?: string | null
+    fileData?: Uint8Array | null
+    extractedText?: string | null
+    structuredData?: string | null
     personalInfo?: string | null
+    professionalSummary?: string | null
     skills?: string | null
     workExperience?: string | null
     education?: string | null
+    certifications?: string | null
+    projects?: string | null
+    canadianMarketAnalysis?: string | null
     confidenceScores?: string | null
-    rawText?: string | null
-    originalFileName?: string | null
-    fileSize?: number | null
+    metadata?: string | null
+    processingMethod?: string | null
+    userCorrections?: string | null
     processingStatus?: string
     createdAt?: Date | string
   }
 
   export type ResumeAnalysisUpdateManyMutationInput = {
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13580,14 +13783,22 @@ export namespace Prisma {
   export type ResumeAnalysisUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14417,28 +14628,32 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type BytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
   }
 
   export type ResumeAnalysisCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    originalFileName?: SortOrder
+    fileData?: SortOrder
+    extractedText?: SortOrder
+    structuredData?: SortOrder
     personalInfo?: SortOrder
+    professionalSummary?: SortOrder
     skills?: SortOrder
     workExperience?: SortOrder
     education?: SortOrder
+    certifications?: SortOrder
+    projects?: SortOrder
+    canadianMarketAnalysis?: SortOrder
     confidenceScores?: SortOrder
-    rawText?: SortOrder
-    originalFileName?: SortOrder
-    fileSize?: SortOrder
+    metadata?: SortOrder
+    processingMethod?: SortOrder
+    userCorrections?: SortOrder
     processingStatus?: SortOrder
     createdAt?: SortOrder
   }
@@ -14446,20 +14661,27 @@ export namespace Prisma {
   export type ResumeAnalysisAvgOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    fileSize?: SortOrder
   }
 
   export type ResumeAnalysisMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    originalFileName?: SortOrder
+    fileData?: SortOrder
+    extractedText?: SortOrder
+    structuredData?: SortOrder
     personalInfo?: SortOrder
+    professionalSummary?: SortOrder
     skills?: SortOrder
     workExperience?: SortOrder
     education?: SortOrder
+    certifications?: SortOrder
+    projects?: SortOrder
+    canadianMarketAnalysis?: SortOrder
     confidenceScores?: SortOrder
-    rawText?: SortOrder
-    originalFileName?: SortOrder
-    fileSize?: SortOrder
+    metadata?: SortOrder
+    processingMethod?: SortOrder
+    userCorrections?: SortOrder
     processingStatus?: SortOrder
     createdAt?: SortOrder
   }
@@ -14467,14 +14689,22 @@ export namespace Prisma {
   export type ResumeAnalysisMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    originalFileName?: SortOrder
+    fileData?: SortOrder
+    extractedText?: SortOrder
+    structuredData?: SortOrder
     personalInfo?: SortOrder
+    professionalSummary?: SortOrder
     skills?: SortOrder
     workExperience?: SortOrder
     education?: SortOrder
+    certifications?: SortOrder
+    projects?: SortOrder
+    canadianMarketAnalysis?: SortOrder
     confidenceScores?: SortOrder
-    rawText?: SortOrder
-    originalFileName?: SortOrder
-    fileSize?: SortOrder
+    metadata?: SortOrder
+    processingMethod?: SortOrder
+    userCorrections?: SortOrder
     processingStatus?: SortOrder
     createdAt?: SortOrder
   }
@@ -14482,23 +14712,16 @@ export namespace Prisma {
   export type ResumeAnalysisSumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    fileSize?: SortOrder
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  export type BytesNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBytesNullableFilter<$PrismaModel>
+    _max?: NestedBytesNullableFilter<$PrismaModel>
   }
 
   export type MentorProfileCountOrderByAggregateInput = {
@@ -15187,12 +15410,8 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type NullableBytesFieldUpdateOperationsInput = {
+    set?: Uint8Array | null
   }
 
   export type UserUpdateOneRequiredWithoutResumeAnalysesNestedInput = {
@@ -15560,20 +15779,21 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  export type NestedBytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  }
+
+  export type NestedBytesNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBytesNullableFilter<$PrismaModel>
+    _max?: NestedBytesNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -15644,28 +15864,44 @@ export namespace Prisma {
   }
 
   export type ResumeAnalysisCreateWithoutUserInput = {
+    originalFileName?: string | null
+    fileData?: Uint8Array | null
+    extractedText?: string | null
+    structuredData?: string | null
     personalInfo?: string | null
+    professionalSummary?: string | null
     skills?: string | null
     workExperience?: string | null
     education?: string | null
+    certifications?: string | null
+    projects?: string | null
+    canadianMarketAnalysis?: string | null
     confidenceScores?: string | null
-    rawText?: string | null
-    originalFileName?: string | null
-    fileSize?: number | null
+    metadata?: string | null
+    processingMethod?: string | null
+    userCorrections?: string | null
     processingStatus?: string
     createdAt?: Date | string
   }
 
   export type ResumeAnalysisUncheckedCreateWithoutUserInput = {
     id?: number
+    originalFileName?: string | null
+    fileData?: Uint8Array | null
+    extractedText?: string | null
+    structuredData?: string | null
     personalInfo?: string | null
+    professionalSummary?: string | null
     skills?: string | null
     workExperience?: string | null
     education?: string | null
+    certifications?: string | null
+    projects?: string | null
+    canadianMarketAnalysis?: string | null
     confidenceScores?: string | null
-    rawText?: string | null
-    originalFileName?: string | null
-    fileSize?: number | null
+    metadata?: string | null
+    processingMethod?: string | null
+    userCorrections?: string | null
     processingStatus?: string
     createdAt?: Date | string
   }
@@ -15887,14 +16123,22 @@ export namespace Prisma {
     NOT?: ResumeAnalysisScalarWhereInput | ResumeAnalysisScalarWhereInput[]
     id?: IntFilter<"ResumeAnalysis"> | number
     userId?: IntFilter<"ResumeAnalysis"> | number
+    originalFileName?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    fileData?: BytesNullableFilter<"ResumeAnalysis"> | Uint8Array | null
+    extractedText?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    structuredData?: StringNullableFilter<"ResumeAnalysis"> | string | null
     personalInfo?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    professionalSummary?: StringNullableFilter<"ResumeAnalysis"> | string | null
     skills?: StringNullableFilter<"ResumeAnalysis"> | string | null
     workExperience?: StringNullableFilter<"ResumeAnalysis"> | string | null
     education?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    certifications?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    projects?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    canadianMarketAnalysis?: StringNullableFilter<"ResumeAnalysis"> | string | null
     confidenceScores?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    rawText?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    originalFileName?: StringNullableFilter<"ResumeAnalysis"> | string | null
-    fileSize?: IntNullableFilter<"ResumeAnalysis"> | number | null
+    metadata?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    processingMethod?: StringNullableFilter<"ResumeAnalysis"> | string | null
+    userCorrections?: StringNullableFilter<"ResumeAnalysis"> | string | null
     processingStatus?: StringFilter<"ResumeAnalysis"> | string
     createdAt?: DateTimeFilter<"ResumeAnalysis"> | Date | string
   }
@@ -16814,14 +17058,22 @@ export namespace Prisma {
 
   export type ResumeAnalysisCreateManyUserInput = {
     id?: number
+    originalFileName?: string | null
+    fileData?: Uint8Array | null
+    extractedText?: string | null
+    structuredData?: string | null
     personalInfo?: string | null
+    professionalSummary?: string | null
     skills?: string | null
     workExperience?: string | null
     education?: string | null
+    certifications?: string | null
+    projects?: string | null
+    canadianMarketAnalysis?: string | null
     confidenceScores?: string | null
-    rawText?: string | null
-    originalFileName?: string | null
-    fileSize?: number | null
+    metadata?: string | null
+    processingMethod?: string | null
+    userCorrections?: string | null
     processingStatus?: string
     createdAt?: Date | string
   }
@@ -16872,42 +17124,66 @@ export namespace Prisma {
   }
 
   export type ResumeAnalysisUpdateWithoutUserInput = {
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ResumeAnalysisUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ResumeAnalysisUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
+    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileData?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
+    structuredData?: NullableStringFieldUpdateOperationsInput | string | null
     personalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalSummary?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: NullableStringFieldUpdateOperationsInput | string | null
     workExperience?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
+    certifications?: NullableStringFieldUpdateOperationsInput | string | null
+    projects?: NullableStringFieldUpdateOperationsInput | string | null
+    canadianMarketAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     confidenceScores?: NullableStringFieldUpdateOperationsInput | string | null
-    rawText?: NullableStringFieldUpdateOperationsInput | string | null
-    originalFileName?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    processingMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    userCorrections?: NullableStringFieldUpdateOperationsInput | string | null
     processingStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

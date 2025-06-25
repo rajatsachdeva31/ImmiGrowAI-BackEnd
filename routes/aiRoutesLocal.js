@@ -165,9 +165,9 @@ router.post('/resume/upload',
       canadianMarketAnalysis: analysis.canadianMarketAnalysis,
       confidenceScores: analysis.confidenceScores,
       metadata: analysis.metadata,
-      rawText: isPDF ? 'PDF processed directly' : analysis.rawText,
+      rawText: isPDF ? 'PDF processed directly' : analysis.rawText, // Will be mapped to extractedText in aiDatabase
       originalFileName: req.file.originalname,
-      fileSize: req.file.size
+      processingMethod: isPDF ? 'direct_pdf' : 'text_extraction'
     });
 
     console.log('💾 Enhanced analysis saved to database with ID:', resumeAnalysis.id);
@@ -296,7 +296,9 @@ router.get('/resume/analyses', authenticateUser, checkImmigrantRole, async (req,
       skills: JSON.parse(analysis.skills || '[]'),
       workExperience: JSON.parse(analysis.workExperience || '[]'),
       education: JSON.parse(analysis.education || '[]'),
-      confidenceScores: JSON.parse(analysis.confidenceScores || '{}')
+      canadianMarketAnalysis: JSON.parse(analysis.canadianMarketAnalysis || '{}'),
+      confidenceScores: JSON.parse(analysis.confidenceScores || '{}'),
+      metadata: JSON.parse(analysis.metadata || '{}')
     }));
 
     res.json({

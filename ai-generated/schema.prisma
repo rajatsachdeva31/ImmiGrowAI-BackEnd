@@ -41,19 +41,27 @@ model UserCareerProfile {
 }
 
 model ResumeAnalysis {
-  id               Int      @id @default(autoincrement())
-  userId           Int
-  personalInfo     String? // JSON object with extracted personal info
-  skills           String? // JSON array of skills
-  workExperience   String? // JSON array of work experience
-  education        String? // JSON array of education
-  confidenceScores String? // JSON object with confidence scores
-  rawText          String? // Original extracted text
-  originalFileName String?
-  fileSize         Int?
-  processingStatus String   @default("completed")
-  createdAt        DateTime @default(now())
-  user             User     @relation(fields: [userId], references: [id])
+  id                     Int      @id @default(autoincrement())
+  userId                 Int
+  originalFileName       String?
+  fileData               Bytes? // Optional file storage
+  extractedText          String? // Extracted text from resume
+  structuredData         String? // JSON structured data
+  personalInfo           String? // JSON object with extracted personal info
+  professionalSummary    String? // JSON professional summary
+  skills                 String? // JSON array of skills
+  workExperience         String? // JSON array of work experience
+  education              String? // JSON array of education
+  certifications         String? // JSON array of certifications
+  projects               String? // JSON array of projects
+  canadianMarketAnalysis String? // JSON Canadian market analysis
+  confidenceScores       String? // JSON object with confidence scores
+  metadata               String? // JSON processing metadata
+  processingMethod       String? // Method used for processing
+  userCorrections        String? // JSON user corrections/feedback
+  processingStatus       String   @default("completed")
+  createdAt              DateTime @default(now())
+  user                   User     @relation(fields: [userId], references: [id])
 }
 
 model MentorProfile {

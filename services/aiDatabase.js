@@ -102,14 +102,19 @@ class AIDatabase {
     return await this.prisma.resumeAnalysis.create({
       data: {
         userId,
+        originalFileName: analysisData.originalFileName,
+        extractedText: analysisData.rawText || analysisData.extractedText,
         personalInfo: JSON.stringify(analysisData.personalInfo),
+        professionalSummary: analysisData.professionalSummary ? JSON.stringify(analysisData.professionalSummary) : null,
         skills: JSON.stringify(analysisData.skills),
         workExperience: JSON.stringify(analysisData.workExperience),
         education: JSON.stringify(analysisData.education),
+        certifications: analysisData.certifications ? JSON.stringify(analysisData.certifications) : null,
+        projects: analysisData.projects ? JSON.stringify(analysisData.projects) : null,
+        canadianMarketAnalysis: JSON.stringify(analysisData.canadianMarketAnalysis),
         confidenceScores: JSON.stringify(analysisData.confidenceScores),
-        rawText: analysisData.rawText,
-        originalFileName: analysisData.originalFileName,
-        fileSize: analysisData.fileSize
+        metadata: JSON.stringify(analysisData.metadata),
+        processingMethod: analysisData.processingMethod || 'direct_pdf'
       }
     });
   }
