@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../ai-generated"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./ai-features.db"
+}
+
+// Simplified User model for AI features only
+model User {
+  id                     Int                    @id @default(autoincrement())
+  email                  String                 @unique
+  firebaseUid            String                 @unique
+  fullName               String
+  roleId                 Int                    @default(4) // Default to immigrant role
+  createdAt              DateTime               @default(now())
+  
+  // AI Feature Relations only
+  careerProfile          UserCareerProfile?
+  resumeAnalyses         ResumeAnalysis[]
+  mentorProfile          MentorProfile?
+  mentorshipMatches      MentorshipMatch[]
+  coachingSessions       CoachingSession[]
+  jobMatches             JobMatch[]
+  skillGapAnalyses       SkillGapAnalysis[]
+}
+
+model UserCareerProfile {
+  id                      Int      @id @default(autoincrement())
+  userId                  Int      @unique
+  professionalSummary     String?
+  skills                  String? // JSON array of skills
+  targetIndustries        String? // JSON array of industries
+  careerObjectives        String?
+  marketAlignmentScore    Float?
+  lastUpdated             DateTime @default(now())
+  createdAt               DateTime @default(now())
+  user                    User     @relation(fields: [userId], references: [id])
+}
+
+model ResumeAnalysis {
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  personalInfo       String? // JSON object with extracted personal info
+  skills             String? // JSON array of skills
+  workExperience     String? // JSON array of work experience
+  education          String? // JSON array of education
+  confidenceScores   String? // JSON object with confidence scores
+  rawText            String? // Original extracted text
+  originalFileName   String?
+  fileSize           Int?
+  processingStatus   String   @default("completed")
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model MentorProfile {
+  id                 Int                @id @default(autoincrement())
+  userId             Int                @unique
+  industry           String
+  expertise          String? // JSON array of expertise areas
+  yearsOfExperience  Int
+  availableHours     String? // JSON object with availability
+  bio                String?
+  linkedInProfile    String?
+  languages          String? // JSON array of languages
+  culturalBackground String?
+  createdAt          DateTime           @default(now())
+  user               User               @relation(fields: [userId], references: [id])
+  mentorshipMatches  MentorshipMatch[]
+}
+
+model MentorshipMatch {
+  id               Int      @id @default(autoincrement())
+  menteeId         Int
+  mentorId         Int
+  compatibilityScore Float
+  status           String   @default("pending") // pending, accepted, rejected, completed
+  matchReason      String? // AI-generated reasoning
+  createdAt        DateTime @default(now())
+  mentee           User     @relation(fields: [menteeId], references: [id])
+  mentor           MentorProfile @relation(fields: [mentorId], references: [id])
+}
+
+model CoachingSession {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  sessionType      String   // career_planning, interview_prep, goal_setting
+  conversationLog  String? // JSON array of conversation messages
+  actionItems      String? // JSON array of action items
+  goals            String? // JSON array of goals
+  progress         String? // JSON object with progress metrics
+  status           String   @default("active") // active, completed, paused
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id])
+}
+
+model JobOpportunity {
+  id               Int        @id @default(autoincrement())
+  title            String
+  company          String
+  location         String
+  description      String?
+  requirements     String? // JSON array of requirements
+  salary           String?
+  jobType          String? // full-time, part-time, contract
+  industry         String?
+  sourceUrl        String?
+  postedDate       DateTime?
+  createdAt        DateTime   @default(now())
+  jobMatches       JobMatch[]
+}
+
+model JobMatch {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  jobOpportunityId Int
+  relevanceScore   Float
+  matchReason      String? // AI-generated reasoning
+  applicationStatus String        @default("not_applied") // not_applied, applied, interviewed, offered, rejected
+  savedAt          DateTime?
+  appliedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  user             User           @relation(fields: [userId], references: [id])
+  jobOpportunity   JobOpportunity @relation(fields: [jobOpportunityId], references: [id])
+}
+
+model SkillGapAnalysis {
+  id                    Int      @id @default(autoincrement())
+  userId                Int
+  targetRole            String
+  currentSkills         String? // JSON array of current skills with levels
+  requiredSkills        String? // JSON array of required skills for target role
+  skillGaps             String? // JSON array of identified gaps
+  improvementRoadmap    String? // JSON array of learning recommendations
+  progressTracking      String? // JSON object with progress on skill development
+  industryBenchmark     String? // JSON object with industry comparison
+  lastAssessmentDate    DateTime @default(now())
+  createdAt             DateTime @default(now())
+  user                  User     @relation(fields: [userId], references: [id])
+} 
