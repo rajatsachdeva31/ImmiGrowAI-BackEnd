@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "round-ring-426501-q0",
+  "private_key_id": "074e8188d20ed269742f911c594cb09410691c0e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC3HR/I1Nf+SKd4\nVMNfas6yuXlZpL/ISObZQiYMW6tGHqxn12CZPemgQY7R1jCJcqFmzl+PWQIZ3Oya\nKgWmjcNIv1Yrc66dh5BrhpqppHyeAkzMXquuzMjER4TY2eG6y+3P9jesQVQOp8b5\nIUMJEJqhSu/cCdygPEQbH89n7J8Rnodd1qwjJpWUV9I38jPvzbk+FFuMgJY3v8ky\no3SS+a7GmrpOvKkvI0GzVAMldUTQMTKrvpatgVtkYGkJQipCXrrZwR0BzyVtbYKS\nBgicIhVpGlgBkwmKcyVrK7hXPTKOPPekIZwW9/pQZKB9fcrmJhGadcWggF5MzraD\nt+MxVGa9AgMBAAECggEABLN0NfE07FvMJNw0OdZhoRf+5AzFOayZdJlspaOS1ZWD\nApV2bui2fz0/n+Z6T4UIXL3OmT0FP0m7L0gF5h08lrkGys3I/VVWIVSO0u0cn+fa\nNeL2UGIEg3l8kR6i22tR2yVsj3kL4eZvxsSSVoC9H4fveXwtVFXHv9SEvBvIh6i5\njLQ3DOapxsUjDMsIWr1zE+bb60LKaiHGsba8QhucCQnzZi6jtbaZdY+qD5BuzCZu\n+1t5zdLUwd33wQy5hBS5Go1Hg2QmMAqS00Ha1Tl7A7SjK5kB7CNxgnEh/QOn+lNa\nerulsm8xNLRhPFARuIsPBmxdP9YzgRGW9zLf7aHJlwKBgQDxvARWZO1FKAusPCuj\nu0nz8Fe9OhOltiZ8ZfwovoNhl5j0uvqh8B0nRXb1A78Vz12iR5YUGNaPwOJQw+td\nvMk8tteqVY74lGRJCX2j8nYUEjCEhtok5/4/ugy6QeZHC7J5gF+czNa080cGe9Bk\nVTnsXMun2e08diXsjBkQeV4hkwKBgQDB64AOhF9m4ECcrLgClXeMzQYPbjzodC4i\nMpuVphM6JEg6kFQc81shoc4zml8FJeq/XNx7/hb3DHHnbTTvPhxs+ib8Ct24HcUn\n6L4+AOKEKgEzYIZMdTYI7t/IbS/RRBtzGGcr7zwHYF+4yd3H2hD028UY88Wr9Cm8\nE8sUrTPIbwKBgQDYcxwHJ9P0yoi5Lh99OiRb0ucdPrV8+f64ALGq4fvOFOoWqJ3n\nBpN0KJT9it887jLPLf5J/HuSuIls/CDyDCq8vJObp4SfPHAXnfHsLRxhmG/tGrqV\ntU1JTpQ66usAzo5+kN4MDrZpzDPasF7GmDGHXQfWQiJUsw3+IuwGfkY1FQKBgEwG\n5nfKkhSlSu+iD6qDqxE6uGuITrzb/9JMgQ8Uw2kCHIdJWpDXIB15cHxuw14jVXud\nDpxWK+7DpEyVVjGN6lsXX/1kzTSIB2n0J9HrSuOCDGJ2L3D+aybpcDcGB79FsnVX\nVeu1qZVCxYSPMDJQXmGBYC6+M/uMiGhCYlZC6ZBlAoGAZHTj5SR1wwl2rLRm68sR\nQdXgwS5PePi2gkjaPrg63NEIeZtdKs2JDMt3mq5oPQMYSzukoudyKopKtxsoM6BY\nuYlqEuUf5f4Kk3rV8WQEQKI63897hQoY36KfKD6rIQPgBLX4BUM7MIUkv4sSeLEd\nwVOu/K9czWbGFYrQMFUKy94=\n-----END PRIVATE KEY-----\n",
+  "client_email": "immigrowai-jobs-service@round-ring-426501-q0.iam.gserviceaccount.com",
+  "client_id": "114956524065030285302",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/immigrowai-jobs-service%40round-ring-426501-q0.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

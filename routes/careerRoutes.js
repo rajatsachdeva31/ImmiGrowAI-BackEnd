@@ -5,6 +5,7 @@ const path = require('path');
 const CareerProfileService = require('../services/CareerProfileService');
 const { PrismaClient } = require('@prisma/client');
 const authMiddleware = require('../middleware/authMiddleware');
+const GoogleJobsService = require('../services/GoogleJobsService');
 
 const prisma = new PrismaClient();
 const careerService = new CareerProfileService();
@@ -432,6 +433,131 @@ router.get('/skill-gap/:analysisId', authMiddleware, async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message || 'Skill gap analysis failed'
+    });
+  }
+});
+
+/**
+ * POST /api/career/generate-resume
+ * Generate an optimized resume for a specific career path
+ */
+router.post('/generate-resume', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const { targetPosition, userProfile, existingAnalysisId } = req.body;
+    
+    if (!targetPosition) {
+      return res.status(400).json({
+        success: false,
+        error: 'Target position is required'
+      });
+    }
+
+    console.log(`📝 Generating resume for user: ${userId}, position: ${targetPosition.title}`);
+
+    // Get existing analysis if provided
+    let existingAnalysis = null;
+    if (existingAnalysisId) {
+      existingAnalysis = await prisma.resumeAnalysis.findFirst({
+        where: {
+          id: existingAnalysisId,
+          userId: parseInt(userId)
+        }
+      });
+    }
+
+    // Get user's career profile if available
+    let userCareerProfile = userProfile;
+    if (!userCareerProfile) {
+      userCareerProfile = await prisma.userCareerProfile.findUnique({
+        where: { userId: parseInt(userId) }
+      });
+    }
+
+    // Generate optimized resume
+    const generatedResume = await careerService.generateOptimizedResume(
+      userCareerProfile || {},
+      targetPosition,
+      existingAnalysis
+    );
+
+    // Save generated resume to database
+    const savedResume = await careerService.saveGeneratedResume(
+      parseInt(userId),
+      generatedResume,
+      targetPosition
+    );
+
+    res.json({
+      success: true,
+      data: {
+        resumeId: savedResume.id,
+        generatedResume,
+        targetPosition,
+        rateLimitStatus: careerService.getRateLimitStatus()
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ Resume generation error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Resume generation failed'
+    });
+  }
+});
+
+/**
+ * POST /api/career/search-jobs
+ * Search for jobs based on career path recommendation
+ */
+router.post('/search-jobs', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const { careerPath, location = 'Canada', filters = {} } = req.body;
+
+    // Validate input
+    if (!careerPath || !careerPath.title) {
+      return res.status(400).json({
+        success: false,
+        error: 'Career path with title is required'
+      });
+    }
+
+    console.log(`🔍 Job search request for: ${careerPath.title} by user: ${userId}`);
+
+    // Initialize Google Jobs Service
+    const googleJobsService = new GoogleJobsService();
+
+    // Add user context to filters
+    const searchFilters = {
+      ...filters,
+      userId: userId,
+      sessionId: req.sessionID || `session_${Date.now()}`
+    };
+
+    // Search for jobs
+    const jobResults = await googleJobsService.searchJobs(careerPath, location, searchFilters);
+
+    // Return results
+    res.json({
+      success: true,
+      data: {
+        ...jobResults,
+        careerPath: {
+          title: careerPath.title,
+          industry: careerPath.industry
+        },
+        searchLocation: location
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ Job search error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to search for jobs',
+      fallbackMessage: 'Job search temporarily unavailable. Please try searching directly on job sites like Indeed.ca, LinkedIn, or Workopolis.'
     });
   }
 });

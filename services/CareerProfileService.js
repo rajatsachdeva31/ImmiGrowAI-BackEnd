@@ -155,6 +155,53 @@ class CareerProfileService extends GeminiResumeService {
     }
   }
 
+  /**
+   * Generate an optimized resume for a specific career path
+   * @param {Object} userProfile - User's career profile and preferences
+   * @param {Object} targetPosition - Selected career path/position
+   * @param {Object} existingAnalysis - Optional existing resume analysis for reference
+   * @returns {Object} Generated resume in structured JSON format
+   */
+  async generateOptimizedResume(userProfile, targetPosition, existingAnalysis = null) {
+    this.checkRateLimit();
+    
+    try {
+      console.log(`🎯 Generating optimized resume for: ${targetPosition.title}`);
+      
+      const prompt = this.createResumeGenerationPrompt(userProfile, targetPosition, existingAnalysis);
+      
+      const result = await this.proModel.generateContent(prompt);
+      const response = await result.response;
+      const resumeText = response.text();
+      
+      this.incrementRequestCount();
+      
+      // Parse JSON response
+      let generatedResume;
+      try {
+        generatedResume = JSON.parse(resumeText);
+      } catch (parseError) {
+        const jsonMatch = resumeText.match(/```json\n([\s\S]*?)\n```/) || 
+                         resumeText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          generatedResume = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+        } else {
+          throw new Error('Failed to parse AI response as JSON');
+        }
+      }
+      
+      // Validate and enhance the generated resume
+      generatedResume = this.validateGeneratedResume(generatedResume, targetPosition);
+      
+      console.log('✅ Optimized resume generated successfully');
+      return generatedResume;
+      
+    } catch (error) {
+      console.error('❌ Resume generation error:', error);
+      throw new Error(`Resume generation failed: ${error.message}`);
+    }
+  }
+
   // Create prompt for position recommendations
   createPositionRecommendationPrompt(resumeAnalysis, userProfile) {
     return `
@@ -446,6 +493,157 @@ Return only valid JSON.
     `;
   }
 
+  // Create prompt for resume generation
+  createResumeGenerationPrompt(userProfile, targetPosition, existingAnalysis) {
+    const existingData = existingAnalysis ? `
+Existing Resume Analysis for Reference:
+${JSON.stringify(existingAnalysis.structuredData || existingAnalysis, null, 2)}
+` : '';
+
+    return `
+Generate a professional resume optimized for the Canadian job market and tailored specifically for this position:
+
+Target Position: ${targetPosition.title}
+Industry: ${targetPosition.industry}
+Level: ${targetPosition.level}
+Required Skills: ${targetPosition.requiredSkills.join(', ')}
+Salary Range: ${targetPosition.salaryRange.min} - ${targetPosition.salaryRange.max} ${targetPosition.salaryRange.currency}
+
+User Profile Information:
+${JSON.stringify(userProfile, null, 2)}
+
+${existingData}
+
+Generate a complete resume in this exact JSON structure that matches our system format:
+{
+  "personalInfo": {
+    "name": "Professional Full Name",
+    "email": "professional.email@example.com",
+    "phone": "+1 (xxx) xxx-xxxx",
+    "location": "City, Province, Canada",
+    "linkedin": "linkedin.com/in/profile",
+    "website": "Optional professional website",
+    "confidence": 1.0
+  },
+  "professionalSummary": {
+    "summary": "3-4 line compelling summary tailored for ${targetPosition.title} in ${targetPosition.industry}, highlighting Canadian market relevance",
+    "careerLevel": "${targetPosition.level}",
+    "yearsOfExperience": [calculated years],
+    "confidence": 1.0
+  },
+  "workExperience": [
+    {
+      "title": "Job Title optimized for Canadian market",
+      "company": "Company Name",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM or Present",
+      "location": "City, Province/Country",
+      "responsibilities": [
+        "Action-oriented responsibility using Canadian business terminology",
+        "Quantified achievement with metrics",
+        "Responsibility highlighting transferable skills for ${targetPosition.title}"
+      ],
+      "achievements": [
+        "Specific achievement with numbers/percentages",
+        "Achievement demonstrating ${targetPosition.requiredSkills[0]} skills",
+        "Result that shows impact and Canadian workplace value"
+      ],
+      "canadianRelevance": "High",
+      "confidence": 1.0
+    }
+  ],
+  "education": [
+    {
+      "degree": "Degree Name",
+      "institution": "Institution Name",
+      "year": "YYYY",
+      "location": "City, Province/Country",
+      "gpa": "Optional if strong",
+      "relevantCoursework": ["Course relevant to ${targetPosition.title}"],
+      "canadianEquivalency": "Canadian education equivalent assessment",
+      "confidence": 1.0
+    }
+  ],
+  "skills": {
+    "technical": [${targetPosition.requiredSkills.map(skill => `"${skill}"`).join(', ')}],
+    "soft": ["Communication", "Leadership", "Problem-solving", "Team collaboration"],
+    "languages": [
+      {
+        "language": "English",
+        "proficiency": "Native/Fluent"
+      },
+      {
+        "language": "French",
+        "proficiency": "Basic/Intermediate (if relevant for Canadian bilingual advantage)"
+      }
+    ],
+    "canadianWorkplaceRelevance": "High",
+    "confidence": 1.0
+  },
+  "certifications": [
+    {
+      "name": "Relevant certification for ${targetPosition.title}",
+      "issuer": "Recognized Canadian/International body",
+      "year": "YYYY",
+      "expiryDate": "YYYY-MM (if applicable)",
+      "canadianRecognition": "Recognized",
+      "confidence": 1.0
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Name relevant to ${targetPosition.title}",
+      "description": "Brief description highlighting skills used in ${targetPosition.industry}",
+      "technologies": ["Tech stack relevant to position"],
+      "role": "Your role in the project",
+      "year": "YYYY",
+      "confidence": 1.0
+    }
+  ],
+  "canadianMarketAnalysis": {
+    "overallRelevance": "High",
+    "strengthsForCanadianMarket": [
+      "Key strength for Canadian ${targetPosition.industry} market",
+      "Advantage in Canadian workplace culture",
+      "Skill particularly valued in Canada"
+    ],
+    "potentialChallenges": [
+      "Minor challenge that can be addressed",
+      "Area for improvement in Canadian context"
+    ],
+    "recommendedImprovements": [
+      "Specific action to enhance Canadian market appeal",
+      "Certification or training to pursue in Canada"
+    ],
+    "targetIndustries": ["${targetPosition.industry}", "Related industry"],
+    "salaryRangeEstimate": "${targetPosition.salaryRange.min} - ${targetPosition.salaryRange.max} ${targetPosition.salaryRange.currency}",
+    "confidence": 1.0
+  },
+  "metadata": {
+    "generatedFor": "${targetPosition.title}",
+    "targetIndustry": "${targetPosition.industry}",
+    "optimizationLevel": "${targetPosition.level}",
+    "canadianMarketFocus": true,
+    "generatedAt": "${new Date().toISOString()}",
+    "aiModel": "gemini-1.5-pro"
+  }
+}
+
+IMPORTANT REQUIREMENTS:
+1. Make it specific to ${targetPosition.title} in ${targetPosition.industry}
+2. Optimize for Canadian job market expectations
+3. Include quantified achievements and metrics
+4. Use Canadian business terminology and spellings
+5. Highlight skills that match the required skills: ${targetPosition.requiredSkills.join(', ')}
+6. Ensure all data is realistic and professional
+7. Include bilingual capabilities if relevant for the Canadian market
+8. Focus on newcomer-friendly aspects if applicable
+9. Make the summary compelling and tailored specifically for this position
+10. Ensure all sections are complete and professionally written
+
+Generate only the JSON, no additional text.`;
+  }
+
   // Validate position recommendations
   validateRecommendations(recommendations) {
     // Ensure required structure
@@ -503,6 +701,47 @@ Return only valid JSON.
     };
     
     return profile;
+  }
+
+  // Validate generated resume
+  validateGeneratedResume(resume, targetPosition) {
+    // Ensure required fields are present
+    if (!resume.personalInfo || !resume.professionalSummary || !resume.workExperience) {
+      throw new Error('Generated resume missing required sections');
+    }
+
+    // Validate professional summary targets the position
+    if (!resume.professionalSummary.summary.toLowerCase().includes(targetPosition.title.toLowerCase().split(' ')[0])) {
+      console.warn('Generated summary may not be well-targeted to position');
+    }
+
+    // Ensure skills include required skills
+    const allSkills = [
+      ...(resume.skills.technical || []),
+      ...(resume.skills.soft || [])
+    ].map(skill => skill.toLowerCase());
+    
+    const requiredSkillsLower = targetPosition.requiredSkills.map(skill => skill.toLowerCase());
+    const missingSkills = requiredSkillsLower.filter(skill => 
+      !allSkills.some(userSkill => userSkill.includes(skill) || skill.includes(userSkill))
+    );
+    
+    if (missingSkills.length > 0) {
+      console.warn(`Generated resume missing some required skills: ${missingSkills.join(', ')}`);
+    }
+
+    // Add generation metadata
+    resume.metadata = {
+      ...resume.metadata,
+      generatedFor: targetPosition.title,
+      targetIndustry: targetPosition.industry,
+      optimizationLevel: targetPosition.level,
+      canadianMarketFocus: true,
+      generatedAt: new Date().toISOString(),
+      aiModel: 'gemini-1.5-pro'
+    };
+
+    return resume;
   }
 
   // Save career profile to database
@@ -596,6 +835,41 @@ Return only valid JSON.
     } catch (error) {
       console.error('❌ Error saving job matches:', error);
       throw new Error(`Failed to save job matches: ${error.message}`);
+    }
+  }
+
+  /**
+   * Save generated resume to database
+   * @param {number} userId - User ID
+   * @param {Object} generatedResume - Generated resume data
+   * @param {Object} targetPosition - Target position details
+   * @returns {Object} Saved resume analysis record
+   */
+  async saveGeneratedResume(userId, generatedResume, targetPosition) {
+    try {
+      const savedAnalysis = await this.prisma.resumeAnalysis.create({
+        data: {
+          userId: userId,
+          originalFileName: `AI_Generated_Resume_${targetPosition.title}_${Date.now()}.json`,
+          structuredData: generatedResume,
+          personalInfo: generatedResume.personalInfo,
+          professionalSummary: generatedResume.professionalSummary?.summary,
+          skills: generatedResume.skills,
+          workExperience: generatedResume.workExperience,
+          education: generatedResume.education,
+          certifications: generatedResume.certifications,
+          projects: generatedResume.projects,
+          canadianMarketAnalysis: generatedResume.canadianMarketAnalysis,
+          confidenceScores: { overall: 1.0 },
+          metadata: generatedResume.metadata,
+          processingMethod: 'ai_generated'
+        }
+      });
+
+      return savedAnalysis;
+    } catch (error) {
+      console.error('❌ Error saving generated resume:', error);
+      throw new Error(`Failed to save generated resume: ${error.message}`);
     }
   }
 }

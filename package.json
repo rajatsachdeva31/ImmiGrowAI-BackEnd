@@ -11,6 +11,7 @@
   "author": "Samruddhi Chavan and Manpreet Gulati",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/talent": "^7.0.0",
     "@google/generative-ai": "^0.17.2",
     "@prisma/client": "^6.10.1",
     "axios": "^1.7.9",
