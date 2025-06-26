@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const { PrismaClient } = require('@prisma/client');
 
-const GoogleAIService = require('../services/googleAiService');
+const { GoogleAIService } = require('../services/googleAiService');
 const DocumentProcessor = require('../services/documentProcessor');
 const authMiddleware = require('../middleware/authMiddleware');
 const aiConfig = require('../services/aiConfig');

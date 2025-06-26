@@ -21,6 +21,7 @@ const calAuthRoutes = require("./routes/calendarAuthRoutes");
 const consultantRoutes = require("./routes/consultantRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const aiRoutesLocal = require("./routes/aiRoutesLocal");
+const careerRoutes = require("./routes/careerRoutes");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -88,6 +89,7 @@ app.use("/api/protected/appointment", appointmentRoutes);
 app.use("/api/protected/oauth", calAuthRoutes);
 app.use("/api/protected/ai", aiRoutes);
 app.use("/api/protected/ai-local", aiRoutesLocal);
+app.use("/api/protected/career", careerRoutes);
 // Start server
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {

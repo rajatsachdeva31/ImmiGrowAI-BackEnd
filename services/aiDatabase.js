@@ -21,14 +21,19 @@ class AIDatabase {
 
   // User management for AI features
   async findOrCreateUser(userData) {
+    console.log('🔍 Starting findOrCreateUser with:', JSON.stringify(userData, null, 2));
+    
     try {
+      console.log('🔍 Searching for user by firebaseUid:', userData.firebaseUid);
+      
       // Try to find existing user by firebaseUid first
       let user = await this.prisma.user.findUnique({
         where: { firebaseUid: userData.firebaseUid }
       });
 
       if (user) {
-        console.log('✅ Found existing AI user by firebaseUid:', user.email);
+        console.log('✅ Found existing AI user by firebaseUid:', user.email, 'with ID:', user.id);
+        console.log('✅ User details:', JSON.stringify(user, null, 2));
         return user;
       }
 
@@ -132,8 +137,8 @@ class AIDatabase {
       where: { userId },
       update: {
         professionalSummary: profileData.professionalSummary,
-        skills: JSON.stringify(profileData.skills),
-        targetIndustries: JSON.stringify(profileData.targetIndustries),
+        skillsCategories: profileData.skills || [],
+        targetIndustries: Array.isArray(profileData.targetIndustries) ? profileData.targetIndustries : [profileData.targetIndustries || 'General'],
         careerObjectives: profileData.careerObjectives,
         marketAlignmentScore: profileData.marketAlignmentScore,
         lastUpdated: new Date()
@@ -141,8 +146,8 @@ class AIDatabase {
       create: {
         userId,
         professionalSummary: profileData.professionalSummary,
-        skills: JSON.stringify(profileData.skills),
-        targetIndustries: JSON.stringify(profileData.targetIndustries),
+        skillsCategories: profileData.skills || [],
+        targetIndustries: Array.isArray(profileData.targetIndustries) ? profileData.targetIndustries : [profileData.targetIndustries || 'General'],
         careerObjectives: profileData.careerObjectives,
         marketAlignmentScore: profileData.marketAlignmentScore
       }
@@ -153,6 +158,46 @@ class AIDatabase {
     return await this.prisma.userCareerProfile.findUnique({
       where: { userId }
     });
+  }
+
+  async saveEnhancedCareerProfile(userId, enhancedData) {
+    console.log('💾 Starting saveEnhancedCareerProfile for userId:', userId);
+    console.log('💾 Enhanced data keys:', Object.keys(enhancedData || {}));
+    console.log('💾 Enhanced data structure:', JSON.stringify(enhancedData, null, 2));
+    
+    try {
+      console.log('💾 Attempting upsert operation...');
+      
+      const result = await this.prisma.userCareerProfile.upsert({
+        where: { userId },
+        update: {
+          professionalSummary: enhancedData.enhancedProfile?.optimized_profile?.elevator_pitch || enhancedData.enhancedProfile?.professionalSummary,
+          skillsCategories: enhancedData.enhancedProfile?.skillsPresentation || enhancedData.enhancedProfile?.skills || enhancedData.enhancedProfile?.skills_positioning || [],
+          targetIndustries: [enhancedData.targetPosition?.industry || enhancedData.targetPosition?.title || 'General'],
+          careerObjectives: enhancedData.enhancedProfile?.optimized_profile?.value_proposition || enhancedData.enhancedProfile?.careerObjectives || enhancedData.applicationStrategy?.coverLetterTemplate,
+          marketAlignmentScore: enhancedData.targetPosition?.successProbability || enhancedData.targetPosition?.skillMatch || 75,
+          lastUpdated: new Date()
+        },
+        create: {
+          userId,
+          professionalSummary: enhancedData.enhancedProfile?.optimized_profile?.elevator_pitch || enhancedData.enhancedProfile?.professionalSummary,
+          skillsCategories: enhancedData.enhancedProfile?.skillsPresentation || enhancedData.enhancedProfile?.skills || enhancedData.enhancedProfile?.skills_positioning || [],
+          targetIndustries: [enhancedData.targetPosition?.industry || enhancedData.targetPosition?.title || 'General'],
+          careerObjectives: enhancedData.enhancedProfile?.optimized_profile?.value_proposition || enhancedData.enhancedProfile?.careerObjectives || enhancedData.applicationStrategy?.coverLetterTemplate,
+          marketAlignmentScore: enhancedData.targetPosition?.successProbability || enhancedData.targetPosition?.skillMatch || 75
+        }
+      });
+      
+      console.log('✅ Upsert operation successful:', JSON.stringify(result, null, 2));
+      return result;
+      
+    } catch (error) {
+      console.error('❌ Error in saveEnhancedCareerProfile:', error);
+      console.error('❌ Error name:', error.name);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      throw error;
+    }
   }
 
   // Coaching Session methods

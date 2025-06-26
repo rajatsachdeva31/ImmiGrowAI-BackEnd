@@ -536,6 +536,317 @@ Be specific about Canadian workplace norms and practical integration strategies.
       throw new Error('Failed to generate cultural guidance');
     }
   }
+
+  // Career Profile Generation for the Resume Page
+  async generateCareerProfileWithGemini(data) {
+    const { resumeAnalysis, userProfile } = data;
+    
+    const prompt = `
+Analyze the following resume data and user profile to create an intelligent career profile suitable for the Canadian job market.
+
+Resume Analysis:
+${JSON.stringify(resumeAnalysis)}
+
+User Profile:
+${JSON.stringify(userProfile)}
+
+Generate a comprehensive career profile in this JSON structure:
+{
+  "profile_summary": {
+    "title": "Professional title based on background",
+    "summary": "2-3 sentence professional summary",
+    "unique_value_proposition": "What makes this person valuable",
+    "years_experience": "Total years of relevant experience"
+  },
+  "skills_analysis": {
+    "core_skills": [
+      {
+        "skill": "Skill name",
+        "level": "Beginner/Intermediate/Advanced/Expert",
+        "years_experience": 3,
+        "market_demand": "High/Medium/Low",
+        "canadian_relevance": "How relevant in Canadian market"
+      }
+    ],
+    "transferable_skills": ["Skills that transfer well to Canada"],
+    "skill_gaps": ["Key skills missing for Canadian market"],
+    "emerging_skills": ["New skills to consider learning"]
+  },
+  "canadian_market_analysis": {
+    "overall_marketability": {
+      "score": 85,
+      "reasoning": "Why this score was given",
+      "improvement_areas": ["Areas to focus on for better marketability"]
+    },
+    "industry_fit": [
+      {
+        "industry": "Technology",
+        "fit_score": 90,
+        "opportunities": ["Specific opportunities in this industry"],
+        "entry_barriers": ["Challenges to overcome"],
+        "growth_potential": "Career growth prospects"
+      }
+    ],
+    "geographic_recommendations": [
+      {
+        "location": "Toronto, ON",
+        "reasoning": "Why this location is recommended",
+        "industry_presence": "Strong tech industry",
+        "newcomer_support": "Available support systems",
+        "cost_of_living": "Relative cost considerations"
+      }
+    ],
+    "salary_expectations": {
+      "entry_level": "$50,000 - $65,000",
+      "mid_level": "$65,000 - $85,000",
+      "senior_level": "$85,000 - $120,000",
+      "factors_affecting_salary": ["Location", "Company size", "Industry"]
+    }
+  },
+  "career_pathways": [
+    {
+      "pathway": "Software Developer",
+      "match_score": 88,
+      "timeline": "3-6 months preparation",
+      "required_skills": ["Skills needed for this path"],
+      "certification_recommendations": ["Relevant certifications"],
+      "typical_progression": "Career advancement path",
+      "market_demand": "High",
+      "advantages": ["Why this is a good fit"],
+      "challenges": ["Potential obstacles"]
+    }
+  ],
+  "next_steps": {
+    "immediate": ["Actions to take in next 30 days"],
+    "short_term": ["Goals for next 3-6 months"],
+    "long_term": ["Career goals for next 1-2 years"]
+  },
+  "newcomer_specific": {
+    "strengths": ["Advantages as a newcomer"],
+    "cultural_considerations": ["Things to be aware of"],
+    "networking_strategies": ["How to build professional network"],
+    "credential_recognition": "Status of credentials in Canada"
+  }
 }
 
-module.exports = GoogleAIService; 
+Focus on providing actionable, Canada-specific guidance that acknowledges both opportunities and challenges for newcomers.
+    `;
+
+    try {
+      const response = await this.makeAIRequest(prompt, true);
+      return JSON.parse(response);
+    } catch (error) {
+      console.error('Career profile generation error:', error);
+      throw new Error('Failed to generate career profile');
+    }
+  }
+
+  // Position Recommendations Generation
+  async generatePositionRecommendationsWithGemini(resumeAnalysis) {
+    const prompt = `
+Based on the following resume analysis, generate specific position recommendations for the Canadian job market.
+
+Resume Analysis:
+${JSON.stringify(resumeAnalysis)}
+
+Generate position recommendations in this JSON structure:
+{
+  "recommendations": [
+    {
+      "position_title": "Software Developer",
+      "match_score": 88,
+      "success_probability": 85,
+      "reasoning": "Why this position is a good match",
+      "required_skills": ["Skills needed for this position"],
+      "matching_skills": ["Current skills that match"],
+      "skill_gaps": ["Skills that need development"],
+      "experience_relevance": {
+        "score": 80,
+        "relevant_experience": ["Which experiences are applicable"],
+        "transferable_experience": ["How international experience applies"]
+      },
+      "market_analysis": {
+        "demand": "High/Medium/Low",
+        "growth_trend": "Growing/Stable/Declining",
+        "average_salary": "$65,000 - $85,000",
+        "top_hiring_companies": ["Company names"],
+        "job_locations": ["Cities with most opportunities"]
+      },
+      "preparation_timeline": "3-6 months",
+      "immediate_actions": ["What to do first"],
+      "certification_recommendations": ["Relevant certifications"],
+      "canadian_specific_requirements": ["Canada-specific needs"],
+      "newcomer_advantages": ["How being a newcomer helps"],
+      "potential_challenges": ["Obstacles to overcome"]
+    }
+  ],
+  "overall_assessment": {
+    "profile_strength": "Strong/Moderate/Developing",
+    "market_readiness": "Ready/Needs preparation/Significant development needed",
+    "key_recommendations": ["Top 3 recommendations"],
+    "timeline_to_employment": "Estimated time to find suitable position"
+  },
+  "industry_insights": {
+    "best_fit_industries": ["Industries that match well"],
+    "emerging_opportunities": ["New areas to consider"],
+    "market_trends": ["Current trends affecting job search"]
+  }
+}
+
+Provide realistic but encouraging recommendations that consider the unique position of newcomers to Canada.
+    `;
+
+    try {
+      const response = await this.makeAIRequest(prompt, true);
+      return JSON.parse(response);
+    } catch (error) {
+      console.error('Position recommendations generation error:', error);
+      throw new Error('Failed to generate position recommendations');
+    }
+  }
+
+  // Enhanced Profile Generation for Specific Position
+  async generateEnhancedProfileWithGemini(targetPosition, resumeAnalysis) {
+    const prompt = `
+Create an enhanced career profile tailored specifically for the target position, based on the resume analysis.
+
+Target Position:
+${JSON.stringify(targetPosition)}
+
+Resume Analysis:
+${JSON.stringify(resumeAnalysis)}
+
+Generate an enhanced profile in this JSON structure:
+{
+  "optimized_profile": {
+    "professional_title": "Title optimized for target position",
+    "elevator_pitch": "30-second introduction tailored to this role",
+    "value_proposition": "Unique value for this specific position",
+    "key_achievements": ["Top achievements relevant to this role"]
+  },
+  "skills_positioning": {
+    "primary_skills": [
+      {
+        "skill": "Skill name",
+        "relevance_to_role": "How it applies to target position",
+        "evidence": "Proof/examples of this skill",
+        "positioning_statement": "How to present this skill"
+      }
+    ],
+    "skill_development_plan": [
+      {
+        "skill": "Skill to develop",
+        "importance": "Critical/Important/Beneficial",
+        "learning_path": "How to acquire this skill",
+        "timeline": "Time needed",
+        "resources": ["Where to learn"]
+      }
+    ]
+  },
+  "experience_repositioning": {
+    "relevant_experience": [
+      {
+        "original_role": "Previous job title",
+        "repositioned_as": "How to present this role",
+        "key_transferable_elements": ["What transfers to target role"],
+        "success_metrics": ["Quantifiable achievements"],
+        "canadian_context": "How to frame for Canadian employers"
+      }
+    ],
+    "project_highlights": [
+      {
+        "project": "Project name",
+        "relevance": "Why it matters for target role",
+        "technologies_used": ["Relevant technologies"],
+        "impact": "Measurable impact/results",
+        "presentation_tip": "How to discuss in interviews"
+      }
+    ]
+  },
+  "application_strategy": {
+    "resume_optimization": {
+      "key_changes": ["Main changes to make to resume"],
+      "keywords_to_include": ["Important keywords for ATS"],
+      "sections_to_emphasize": ["Which resume sections to highlight"],
+      "formatting_tips": ["How to structure for this role"]
+    },
+    "cover_letter_strategy": {
+      "opening_approach": "How to start the cover letter",
+      "key_points_to_address": ["Main points to cover"],
+      "company_research_areas": ["What to research about companies"],
+      "closing_strategy": "How to end strongly"
+    },
+    "networking_approach": {
+      "target_professionals": ["Types of people to connect with"],
+      "conversation_starters": ["How to initiate conversations"],
+      "value_you_bring": ["What you offer to your network"],
+      "follow_up_strategies": ["How to maintain connections"]
+    }
+  },
+  "interview_preparation": {
+    "common_questions": [
+      {
+        "question": "Likely interview question",
+        "strategy": "How to approach this question",
+        "key_points": ["Main points to cover"],
+        "example_answer_structure": "Framework for answering"
+      }
+    ],
+    "behavioral_examples": [
+      {
+        "situation": "STAR method situation",
+        "task": "Task you had",
+        "action": "Action you took",
+        "result": "Result achieved",
+        "relevance": "Why this example works for target role"
+      }
+    ],
+    "technical_preparation": {
+      "skills_to_demonstrate": ["Technical skills to showcase"],
+      "portfolio_items": ["What to include in portfolio"],
+      "coding_challenges": ["Types of challenges to practice"],
+      "system_design_topics": ["Areas to study"]
+    },
+    "cultural_fit_preparation": {
+      "company_culture_research": ["What to research"],
+      "canadian_workplace_norms": ["Cultural aspects to understand"],
+      "questions_to_ask": ["Good questions to ask interviewer"]
+    }
+  },
+  "90_day_action_plan": {
+    "week_1_2": ["Immediate actions"],
+    "month_1": ["Goals for first month"],
+    "month_2": ["Second month objectives"],
+    "month_3": ["Third month targets"],
+    "success_metrics": ["How to measure progress"]
+  }
+}
+
+Create a comprehensive, actionable plan that positions the candidate optimally for the specific target role.
+    `;
+
+    try {
+      const response = await this.makeAIRequest(prompt, true);
+      return JSON.parse(response);
+    } catch (error) {
+      console.error('Enhanced profile generation error:', error);
+      throw new Error('Failed to generate enhanced profile');
+    }
+  }
+}
+
+// Export the class and standalone functions for backwards compatibility
+const googleAIService = new GoogleAIService();
+
+// Export individual functions for direct use
+const generateCareerProfileWithGemini = (data) => googleAIService.generateCareerProfileWithGemini(data);
+const generatePositionRecommendationsWithGemini = (resumeAnalysis) => googleAIService.generatePositionRecommendationsWithGemini(resumeAnalysis);
+const generateEnhancedProfileWithGemini = (targetPosition, resumeAnalysis) => googleAIService.generateEnhancedProfileWithGemini(targetPosition, resumeAnalysis);
+
+module.exports = {
+  GoogleAIService,
+  generateCareerProfileWithGemini,
+  generatePositionRecommendationsWithGemini, 
+  generateEnhancedProfileWithGemini,
+  default: googleAIService
+}; 

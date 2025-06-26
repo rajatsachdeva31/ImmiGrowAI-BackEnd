@@ -28,6 +28,7 @@ model User {
   carBookings            CarBooking[]
   carDealership          CarDealership?
   carListings            CarListing[]
+  coachingSessions       CoachingSession[]
   consultantSessions     ConsultationBooking[]  @relation("Consultant")
   consultationBookings   ConsultationBooking[]  @relation("User")
   favouriteCars          FavouriteCar[]
@@ -35,18 +36,16 @@ model User {
   houseBookings          HouseBooking[]
   houseListings          HouseListing[]
   immigrationConsultant  ImmigrationConsultant?
-  payments               Payment[]
-  realtor                Realtor?
-  role                   Role                   @relation(fields: [roleId], references: [id])
-  userDocuments          UserDocument[]
-  // AI Feature Relations
-  careerProfile          UserCareerProfile?
-  resumeAnalyses         ResumeAnalysis[]
+  jobMatches             JobMatch[]
   mentorProfile          MentorProfile?
   mentorshipMatches      MentorshipMatch[]
-  coachingSessions       CoachingSession[]
-  jobMatches             JobMatch[]
+  payments               Payment[]
+  realtor                Realtor?
+  resumeAnalyses         ResumeAnalysis[]
   skillGapAnalyses       SkillGapAnalysis[]
+  role                   Role                   @relation(fields: [roleId], references: [id])
+  careerProfile          UserCareerProfile?
+  userDocuments          UserDocument[]
 }
 
 model Realtor {
@@ -279,25 +278,19 @@ model FavouriteHouse {
   @@unique([userId, listingId], name: "userId_listingId")
 }
 
-enum WorkType {
-  BROKERAGE
-  INDEPENDENT
-}
-
-// AI Feature Models
 model UserCareerProfile {
-  id                    Int      @id @default(autoincrement())
-  userId                Int      @unique
-  professionalSummary   String?
-  skillsCategories      Json?
-  careerObjectives      String?
-  targetIndustries      String[]
-  marketAlignmentScore  Int?
-  skillGaps             Json?
-  improvementRoadmap    Json?
-  lastUpdated           DateTime @default(now())
-  createdAt             DateTime @default(now())
-  user                  User     @relation(fields: [userId], references: [id])
+  id                   Int      @id @default(autoincrement())
+  userId               Int      @unique
+  professionalSummary  String?
+  skillsCategories     Json?
+  careerObjectives     String?
+  targetIndustries     String[]
+  marketAlignmentScore Int?
+  skillGaps            Json?
+  improvementRoadmap   Json?
+  lastUpdated          DateTime @default(now())
+  createdAt            DateTime @default(now())
+  user                 User     @relation(fields: [userId], references: [id])
 }
 
 model ResumeAnalysis {
@@ -307,101 +300,107 @@ model ResumeAnalysis {
   fileData                Bytes?
   extractedText           String?
   structuredData          Json?
-  personalInfo            Json?     // Enhanced personal information
-  professionalSummary     String?   // AI-generated professional summary
-  skills                  Json?     // Structured skills analysis
-  workExperience          Json?     // Enhanced work experience analysis
-  education               Json?     // Education background
-  certifications          Json?     // Professional certifications
-  projects                Json?     // Project portfolio
-  canadianMarketAnalysis  Json?     // Canadian job market insights
-  confidenceScores        Json?     // AI confidence scores
-  metadata                Json?     // Processing metadata
-  processingMethod        String?   // 'direct_pdf' or 'text_extraction'
+  confidenceScores        Json?
   userCorrections         Json?
   createdAt               DateTime @default(now())
+  canadianMarketAnalysis  Json?
+  certifications          Json?
+  education               Json?
+  metadata                Json?
+  personalInfo            Json?
+  processingMethod        String?
+  professionalSummary     String?
+  projects                Json?
+  skills                  Json?
+  workExperience          Json?
+  positionRecommendations Json?
   user                    User     @relation(fields: [userId], references: [id])
 }
 
 model MentorProfile {
-  id                     Int                @id @default(autoincrement())
-  userId                 Int                @unique
-  industryExpertise      String[]
-  yearsOfExperience      String
-  specializations        String[]
-  culturalBackground     String?
-  languagesSpoken        String[]
-  mentorshipCapacity     Int                @default(3)
-  availabilityHours      Json?
-  communicationStyle     String[]
-  successStories         String?
-  isActive               Boolean            @default(true)
-  createdAt              DateTime           @default(now())
-  user                   User               @relation(fields: [userId], references: [id])
-  mentorshipMatches      MentorshipMatch[]
+  id                 Int               @id @default(autoincrement())
+  userId             Int               @unique
+  industryExpertise  String[]
+  yearsOfExperience  String
+  specializations    String[]
+  culturalBackground String?
+  languagesSpoken    String[]
+  mentorshipCapacity Int               @default(3)
+  availabilityHours  Json?
+  communicationStyle String[]
+  successStories     String?
+  isActive           Boolean           @default(true)
+  createdAt          DateTime          @default(now())
+  user               User              @relation(fields: [userId], references: [id])
+  mentorshipMatches  MentorshipMatch[]
 }
 
 model MentorshipMatch {
-  id                  Int           @id @default(autoincrement())
-  mentorId            Int
-  menteeId            Int
-  compatibilityScore  Int
-  matchReasoning      Json?
-  status              String        @default("pending")
-  createdAt           DateTime      @default(now())
-  mentor              MentorProfile @relation(fields: [mentorId], references: [id])
-  mentee              User          @relation(fields: [menteeId], references: [id])
+  id                 Int           @id @default(autoincrement())
+  mentorId           Int
+  menteeId           Int
+  compatibilityScore Int
+  matchReasoning     Json?
+  status             String        @default("pending")
+  createdAt          DateTime      @default(now())
+  mentee             User          @relation(fields: [menteeId], references: [id])
+  mentor             MentorProfile @relation(fields: [mentorId], references: [id])
 }
 
 model CoachingSession {
-  id                   Int      @id @default(autoincrement())
-  userId               Int
-  sessionType          String
-  conversationHistory  Json?
-  sessionObjectives    String[]
-  outcomes             Json?
-  progressMetrics      Json?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  user                 User     @relation(fields: [userId], references: [id])
+  id                  Int      @id @default(autoincrement())
+  userId              Int
+  sessionType         String
+  conversationHistory Json?
+  sessionObjectives   String[]
+  outcomes            Json?
+  progressMetrics     Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id])
 }
 
 model JobOpportunity {
-  id                   Int        @id @default(autoincrement())
-  title                String
-  company              String
-  location             String
-  description          String?
-  requirements         String[]
-  salaryRange          Json?
-  jobUrl               String?
-  isNewcomerFriendly   Boolean    @default(false)
-  discoveredAt         DateTime   @default(now())
-  isActive             Boolean    @default(true)
-  jobMatches           JobMatch[]
+  id                 Int        @id @default(autoincrement())
+  title              String
+  company            String
+  location           String
+  description        String?
+  requirements       String[]
+  salaryRange        Json?
+  jobUrl             String?
+  isNewcomerFriendly Boolean    @default(false)
+  discoveredAt       DateTime   @default(now())
+  isActive           Boolean    @default(true)
+  jobMatches         JobMatch[]
 }
 
 model JobMatch {
-  id                  Int             @id @default(autoincrement())
-  userId              Int
-  jobId               Int
-  matchScore          Int
-  matchAnalysis       Json?
-  skillsGaps          String[]
-  applicationStatus   String          @default("not_applied")
-  createdAt           DateTime        @default(now())
-  user                User            @relation(fields: [userId], references: [id])
-  jobOpportunity      JobOpportunity  @relation(fields: [jobId], references: [id])
+  id                Int            @id @default(autoincrement())
+  userId            Int
+  jobId             Int
+  matchScore        Int
+  matchAnalysis     Json?
+  skillsGaps        String[]
+  applicationStatus String         @default("not_applied")
+  createdAt         DateTime       @default(now())
+  jobOpportunity    JobOpportunity @relation(fields: [jobId], references: [id])
+  user              User           @relation(fields: [userId], references: [id])
 }
 
 model SkillGapAnalysis {
-  id                  Int      @id @default(autoincrement())
-  userId              Int
-  currentSkills       Json?
-  targetSkills        Json?
-  identifiedGaps      Json?
-  learningPath        Json?
-  progressTracking    Json?
-  lastUpdated         DateTime @default(now())
-  user                User     @relation(fields: [userId], references: [id])
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  currentSkills    Json?
+  targetSkills     Json?
+  identifiedGaps   Json?
+  learningPath     Json?
+  progressTracking Json?
+  lastUpdated      DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id])
+}
+
+enum WorkType {
+  BROKERAGE
+  INDEPENDENT
 }
